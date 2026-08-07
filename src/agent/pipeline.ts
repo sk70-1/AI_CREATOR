@@ -148,6 +148,7 @@ Context: ${selectedTopic.summary}
 
 Task: Write a high-impact, viral-ready X post or thread about this story.
 Rules:
+- EMOJIS & FORMATTING: Use 2-4 vibrant, expressive emojis (e.g., 🚀, ⚡, 🤖, 💡, 🔥, 📊, 🧵, 👇) to make the hook visually exciting and fun to read!
 - Make it intriguing, punchy, and ultra-concise.
 - STRICT CHARACTER LIMIT: The user has a standard non-premium X account. The entire single post (or each tweet in a thread separated by "---") MUST BE STRICTLY UNDER 240 CHARACTERS.
 - Include a short key takeaway or takeaway + link.
