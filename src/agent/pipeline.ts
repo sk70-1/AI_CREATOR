@@ -1,4 +1,4 @@
-import { GoogleGenAI } from '@google/genai';
+// @google/genai is ESM-only — must use dynamic import() for Vercel CJS compatibility
 import { db } from '../db/database';
 import { discoverTopics, RawTopic } from './discovery';
 import { publishToTwitter } from '../publishers/twitter';
@@ -18,7 +18,7 @@ export interface ExecutionLog {
 
 const MODELS_TO_TRY = ['gemini-2.0-flash', 'gemini-flash-latest'];
 
-async function generateContentWithFallback(ai: GoogleGenAI, prompt: string): Promise<string> {
+async function generateContentWithFallback(ai: any, prompt: string): Promise<string> {
   let lastError: any = null;
 
   for (const model of MODELS_TO_TRY) {
@@ -58,6 +58,7 @@ export async function runAgentPipeline(agentId: string = 'default_agent'): Promi
     };
   }
 
+  const { GoogleGenAI } = await import('@google/genai');
   const ai = new GoogleGenAI({ apiKey });
 
   // 1. Fetch Agent Persona
