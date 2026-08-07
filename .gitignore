@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Environment configuration
+.env
+.env.local
+.env.production
+
+# Build output
+dist/
+.vercel/
+
+# Local SQLite databases & logs
+*.db
+*.sqlite
+*.log
+local.db
+
+# Temp & scratch directories
+scratch/
