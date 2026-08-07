@@ -77,4 +77,16 @@ router.post('/agent/config', async (req: Request, res: Response) => {
   }
 });
 
+// Cron trigger endpoint (called by Vercel Cron daily)
+router.get('/cron/trigger', async (req: Request, res: Response) => {
+  try {
+    await initDatabase();
+    const result = await runAgentPipeline('default_agent');
+    res.json({ success: true, result });
+  } catch (error: any) {
+    console.error('Cron trigger error:', error);
+    res.status(500).json({ success: false, error: error.message || 'Cron pipeline failure' });
+  }
+});
+
 export default router;
