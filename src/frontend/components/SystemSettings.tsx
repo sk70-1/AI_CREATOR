@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Settings, Shield, Database, Cpu, CheckCircle2, AlertCircle, RefreshCw, ExternalLink, Share2, Code } from 'lucide-react';
+import { Settings, Shield, Database, Cpu, CheckCircle2, AlertCircle, RefreshCw, Share2, Code, Globe } from 'lucide-react';
 
 interface SystemSettingsProps {
   status: {
     hasTwitterKeys?: boolean;
+    hasLinkedInKeys?: boolean;
     hasGeminiKey?: boolean;
     tursoConnected?: boolean;
     postsCount?: number;
@@ -36,10 +37,10 @@ export const SystemSettings: React.FC<SystemSettingsProps> = ({
         <div>
           <h3 className="font-headline text-xl font-bold text-on-surface flex items-center gap-2">
             <Settings className="w-5 h-5 text-primary" />
-            System Settings & API Environment Monitor
+            System Settings & Multi-Platform Monitor
           </h3>
           <p className="font-body text-xs text-on-surface-variant">
-            Live telemetry for Google Gemini 2.5 Flash, Turso LibSQL Cloud DB, X Twitter API, and Vercel Cron.
+            Live telemetry for Google Gemini 2.5 Flash, Turso LibSQL DB, X Twitter, LinkedIn, and Vercel Cron.
           </p>
         </div>
         <button
@@ -52,7 +53,7 @@ export const SystemSettings: React.FC<SystemSettingsProps> = ({
       </div>
 
       {/* Grid of System Service Monitors */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Service 1: Google Gemini 2.5 Flash */}
         <div className="bg-surface border border-border-subtle rounded-xl p-5 flex flex-col justify-between gap-4 hover:border-primary/50 transition-colors">
           <div className="flex justify-between items-start">
@@ -61,25 +62,25 @@ export const SystemSettings: React.FC<SystemSettingsProps> = ({
                 <Cpu className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-headline font-bold text-on-surface text-base">Google Gemini 2.5 Flash</h4>
-                <p className="font-mono text-xs text-on-surface-variant">AI Topic Curation & Quality Gate</p>
+                <h4 className="font-headline font-bold text-on-surface text-base">Google Gemini AI</h4>
+                <p className="font-mono text-xs text-on-surface-variant">Topic Curation & Quality Gate</p>
               </div>
             </div>
             {status?.hasGeminiKey ? (
-              <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-[11px] rounded-full flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Configured
+              <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-[10px] rounded-full flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3" /> Configured
               </span>
             ) : (
-              <span className="px-2.5 py-1 bg-tertiary/10 text-tertiary border border-tertiary/20 font-mono text-[11px] rounded-full flex items-center gap-1">
-                <AlertCircle className="w-3.5 h-3.5" /> Key Required
+              <span className="px-2 py-0.5 bg-tertiary/10 text-tertiary border border-tertiary/20 font-mono text-[10px] rounded-full flex items-center gap-1">
+                <AlertCircle className="w-3 h-3" /> Key Required
               </span>
             )}
           </div>
           <p className="font-body text-xs text-on-surface-variant leading-relaxed">
-            Powers autonomous tech news discovery, viral copy generation, tone tailoring, and 9.6/10 quality gate scoring.
+            Powers autonomous tech news discovery, viral copy generation, tone tailoring, and 9.5/10 quality gate scoring.
           </p>
           <div className="font-mono text-[11px] text-text-muted pt-2 border-t border-border-subtle flex justify-between">
-            <span>Model: gemini-2.5-flash</span>
+            <span>Model: gemini-2.0-flash</span>
             <span>API Package: @google/genai</span>
           </div>
         </div>
@@ -92,12 +93,12 @@ export const SystemSettings: React.FC<SystemSettingsProps> = ({
                 <Database className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-headline font-bold text-on-surface text-base">Turso Cloud LibSQL DB</h4>
+                <h4 className="font-headline font-bold text-on-surface text-base">Turso Cloud DB</h4>
                 <p className="font-mono text-xs text-on-surface-variant">Serverless Cloud Persistence</p>
               </div>
             </div>
-            <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-[11px] rounded-full flex items-center gap-1">
-              <CheckCircle2 className="w-3.5 h-3.5" /> Connected
+            <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-[10px] rounded-full flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3" /> Connected
             </span>
           </div>
           <p className="font-body text-xs text-on-surface-variant leading-relaxed">
@@ -118,16 +119,16 @@ export const SystemSettings: React.FC<SystemSettingsProps> = ({
               </div>
               <div>
                 <h4 className="font-headline font-bold text-on-surface text-base">X (Twitter) Publisher</h4>
-                <p className="font-mono text-xs text-on-surface-variant">Direct API v2 & Web Intent</p>
+                <p className="font-mono text-xs text-on-surface-variant">Direct API v2 & Intent</p>
               </div>
             </div>
             {status?.hasTwitterKeys ? (
-              <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-[11px] rounded-full flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Direct API Active
+              <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-[10px] rounded-full flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3" /> API Active
               </span>
             ) : (
-              <span className="px-2.5 py-1 bg-primary-container/20 text-primary border border-primary/30 font-mono text-[11px] rounded-full flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Intent Fallback Active
+              <span className="px-2 py-0.5 bg-primary-container/20 text-primary border border-primary/30 font-mono text-[10px] rounded-full flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3" /> Intent Active
               </span>
             )}
           </div>
@@ -136,11 +137,42 @@ export const SystemSettings: React.FC<SystemSettingsProps> = ({
           </p>
           <div className="font-mono text-[11px] text-text-muted pt-2 border-t border-border-subtle flex justify-between">
             <span>Library: twitter-api-v2</span>
-            <span>Mode: Dual Publish Protocol</span>
+            <span>Mode: Dual Protocol</span>
           </div>
         </div>
 
-        {/* Service 4: Vercel Cron Automation */}
+        {/* Service 4: LinkedIn Publisher */}
+        <div className="bg-surface border border-border-subtle rounded-xl p-5 flex flex-col justify-between gap-4 hover:border-primary/50 transition-colors">
+          <div className="flex justify-between items-start">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-surface-container border border-border-subtle flex items-center justify-center text-[#0A66C2]">
+                <Globe className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="font-headline font-bold text-on-surface text-base">LinkedIn Publisher</h4>
+                <p className="font-mono text-xs text-on-surface-variant">ugcPosts API & Share Intent</p>
+              </div>
+            </div>
+            {status?.hasLinkedInKeys ? (
+              <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-[10px] rounded-full flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3" /> API Active
+              </span>
+            ) : (
+              <span className="px-2 py-0.5 bg-[#0A66C2]/20 text-[#0A66C2] border border-[#0A66C2]/30 font-mono text-[10px] rounded-full flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3" /> Intent Active
+              </span>
+            )}
+          </div>
+          <p className="font-body text-xs text-on-surface-variant leading-relaxed">
+            Shares curated tech posts to LinkedIn profile/company page via ugcPosts API or 1-click share intent URLs.
+          </p>
+          <div className="font-mono text-[11px] text-text-muted pt-2 border-t border-border-subtle flex justify-between">
+            <span>Endpoint: /api/agent/publish/linkedin</span>
+            <span>Mode: Multi Share</span>
+          </div>
+        </div>
+
+        {/* Service 5: Vercel Cron Automation */}
         <div className="bg-surface border border-border-subtle rounded-xl p-5 flex flex-col justify-between gap-4 hover:border-primary/50 transition-colors">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-3">
@@ -155,10 +187,10 @@ export const SystemSettings: React.FC<SystemSettingsProps> = ({
             <button
               onClick={handleCronTrigger}
               disabled={isCronRunning}
-              className="px-2.5 py-1 bg-primary-container text-on-primary-container font-mono text-[11px] font-semibold rounded hover:opacity-90 transition-opacity flex items-center gap-1 disabled:opacity-50"
+              className="px-2.5 py-1 bg-primary-container text-on-primary-container font-mono text-[10px] font-semibold rounded hover:opacity-90 transition-opacity flex items-center gap-1 disabled:opacity-50"
             >
               {isCronRunning ? <RefreshCw className="w-3 h-3 animate-spin" /> : null}
-              <span>{isCronRunning ? 'Running Cron...' : 'Run Cron Now'}</span>
+              <span>{isCronRunning ? 'Running...' : 'Run Cron'}</span>
             </button>
           </div>
           <p className="font-body text-xs text-on-surface-variant leading-relaxed">

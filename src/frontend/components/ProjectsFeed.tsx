@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
-import { Share2, ExternalLink, Sparkles, CheckCircle2, Clock, MessageSquare, Image as ImageIcon } from 'lucide-react';
+import { 
+  Share2, 
+  ExternalLink, 
+  Sparkles, 
+  CheckCircle2, 
+  Clock, 
+  MessageSquare, 
+  Image as ImageIcon,
+  Copy,
+  Check,
+  Globe
+} from 'lucide-react';
 
 export interface PostItem {
   id: string;
@@ -29,6 +40,7 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
   onTriggerPipeline,
 }) => {
   const [filter, setFilter] = useState<'all' | 'published' | 'drafts'>('all');
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const filteredPosts = posts.filter((post) => {
     if (filter === 'published') return post.is_published === 1;
@@ -40,6 +52,22 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
     return `https://twitter.com/intent/tweet?text=${encodeURIComponent(content)}`;
   };
 
+  const getLinkedInShareUrl = (topicUrl?: string) => {
+    const targetUrl = topicUrl || 'https://github.com/sk70-1/AI_CREATOR';
+    return `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(targetUrl)}`;
+  };
+
+  const getRedditShareUrl = (topicUrl?: string, title?: string) => {
+    const targetUrl = topicUrl || 'https://github.com/sk70-1/AI_CREATOR';
+    return `https://www.reddit.com/submit?url=${encodeURIComponent(targetUrl)}&title=${encodeURIComponent(title || 'AURA AI Curator')}`;
+  };
+
+  const handleCopyText = (id: string, text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
   return (
     <div className="bg-surface border border-border-subtle rounded-xl p-5 mb-6 shadow-xl shadow-black/30 select-none">
       {/* Header & Filter Tabs */}
@@ -47,10 +75,10 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
         <div>
           <h3 className="font-headline text-lg font-bold text-on-surface flex items-center gap-2">
             <MessageSquare className="w-5 h-5 text-primary" />
-            Curated Content & Publishing Stream
+            Multi-Platform Content Stream
           </h3>
           <p className="font-body text-xs text-on-surface-variant">
-            Live AI-generated tech insights & AI cover graphics scored by Gemini Quality Gate
+            Autonomous tech insights formatted for X (Twitter), LinkedIn, and Reddit
           </p>
         </div>
 
@@ -83,7 +111,7 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
                 : 'text-on-surface-variant hover:text-on-surface'
             }`}
           >
-            Web Intent ({posts.filter((p) => !p.is_published).length})
+            Multi-Share ({posts.filter((p) => !p.is_published).length})
           </button>
         </div>
       </div>
@@ -102,7 +130,7 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
             No Curated Posts Yet
           </h4>
           <p className="font-body text-xs text-on-surface-variant max-w-md mx-auto mb-4">
-            Run the autonomous discovery pipeline to scrape top stories, generate AI topic cover art, and draft viral posts.
+            Run the autonomous discovery pipeline to scrape top stories, generate AI topic cover art, and draft posts for X, LinkedIn, and Reddit.
           </p>
           <button
             onClick={onTriggerPipeline}
@@ -130,11 +158,11 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
                     <div className="flex items-center gap-2">
                       {post.is_published === 1 ? (
                         <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-mono rounded-full flex items-center gap-1">
-                          <CheckCircle2 className="w-3 h-3" /> Direct X Published
+                          <CheckCircle2 className="w-3 h-3" /> Direct API Published
                         </span>
                       ) : (
                         <span className="px-2 py-0.5 bg-primary-container/20 text-primary border border-primary/30 text-[11px] font-mono rounded-full flex items-center gap-1">
-                          <Share2 className="w-3 h-3" /> Web Intent Ready
+                          <Globe className="w-3 h-3" /> Multi-Share Ready
                         </span>
                       )}
 
@@ -192,22 +220,67 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
                   </div>
                 </div>
 
-                {/* Action Toolbar */}
-                <div className="pt-2 border-t border-border-subtle/50 flex justify-between items-center text-xs">
+                {/* Multi-Platform Action Toolbar */}
+                <div className="pt-3 border-t border-border-subtle/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs">
                   <span className="font-mono text-text-muted text-[11px]">
                     Agent: {post.agent_id || 'Nexus-7'}
                   </span>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                    {/* Share to X */}
                     <a
                       href={getTwitterIntentUrl(postText)}
                       target="_blank"
                       rel="noreferrer"
-                      className="px-3 py-1.5 bg-primary text-background font-mono font-semibold rounded-lg hover:opacity-90 transition-opacity flex items-center gap-1.5 text-xs shadow-sm shadow-primary/20"
+                      className="px-2.5 py-1.5 bg-primary-container text-on-primary-container font-mono font-semibold rounded-lg hover:opacity-90 transition-opacity flex items-center gap-1.5 text-xs shadow-sm shadow-primary-container/20"
+                      title="Post to X (Twitter)"
                     >
                       <Share2 className="w-3.5 h-3.5" />
-                      <span>Publish via X Intent</span>
+                      <span>Post to X</span>
                     </a>
+
+                    {/* Share to LinkedIn */}
+                    <a
+                      href={getLinkedInShareUrl(urlText)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-2.5 py-1.5 bg-[#0A66C2]/20 text-[#0A66C2] border border-[#0A66C2]/40 font-mono font-semibold rounded-lg hover:bg-[#0A66C2]/30 transition-colors flex items-center gap-1.5 text-xs"
+                      title="Post to LinkedIn"
+                    >
+                      <Share2 className="w-3.5 h-3.5 text-[#0A66C2]" />
+                      <span>LinkedIn</span>
+                    </a>
+
+                    {/* Share to Reddit */}
+                    <a
+                      href={getRedditShareUrl(urlText, titleText)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-2.5 py-1.5 bg-[#FF4500]/20 text-[#FF4500] border border-[#FF4500]/40 font-mono font-semibold rounded-lg hover:bg-[#FF4500]/30 transition-colors flex items-center gap-1.5 text-xs"
+                      title="Post to Reddit"
+                    >
+                      <Share2 className="w-3.5 h-3.5 text-[#FF4500]" />
+                      <span>Reddit</span>
+                    </a>
+
+                    {/* Copy Post Text */}
+                    <button
+                      onClick={() => handleCopyText(post.id, postText)}
+                      className="px-2 py-1.5 bg-surface-variant text-on-surface-variant hover:text-on-surface border border-border-subtle rounded-lg font-mono text-xs transition-colors flex items-center gap-1"
+                      title="Copy Post Content"
+                    >
+                      {copiedId === post.id ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          <span className="text-emerald-400">Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </button>
                   </div>
                 </div>
               </div>

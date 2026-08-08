@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { db, initDatabase } from '../db/database';
 import { runAgentPipeline } from '../agent/pipeline';
+import { publishToLinkedIn, getLinkedInShareIntentUrl } from '../publishers/linkedin';
 import crypto from 'crypto';
 
 const router = Router();
@@ -26,6 +27,22 @@ router.get('/agent/feed', async (req: Request, res: Response) => {
     res.json({ success: true, posts: postsResult.rows });
   } catch (error: any) {
     res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Publish post to LinkedIn API or generate Intent URL
+router.post('/agent/publish/linkedin', async (req: Request, res: Response) => {
+  try {
+    const { content, topicUrl, topicTitle } = req.body;
+    if (!content) {
+      return res.status(400).json({ success: false, error: 'Post content is required.' });
+    }
+
+    const result = await publishToLinkedIn(content, topicUrl, topicTitle);
+    res.json({ success: true, result });
+  } catch (error: any) {
+    console.error('Error publishing to LinkedIn:', error);
+    res.status(500).json({ success: false, error: error.message || 'LinkedIn publish failed' });
   }
 });
 
@@ -165,6 +182,11 @@ router.get('/agent/status', async (req: Request, res: Response) => {
       process.env.TWITTER_ACCESS_SECRET
     );
 
+    const hasLinkedInKeys = Boolean(
+      process.env.LINKEDIN_ACCESS_TOKEN &&
+      process.env.LINKEDIN_AUTHOR_URN
+    );
+
     const hasGeminiKey = Boolean(process.env.GEMINI_API_KEY);
 
     res.json({
@@ -173,6 +195,7 @@ router.get('/agent/status', async (req: Request, res: Response) => {
       agents,
       postsCount,
       hasTwitterKeys,
+      hasLinkedInKeys,
       hasGeminiKey,
       tursoConnected: true,
       timestamp: new Date().toISOString(),
