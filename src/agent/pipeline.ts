@@ -1,4 +1,4 @@
-// @google/genai is ESM-only — must use dynamic import() for Vercel CJS compatibility
+import { GoogleGenAI } from '@google/genai';
 import { db } from '../db/database';
 import { discoverTopics, RawTopic } from './discovery';
 import { publishToTwitter } from '../publishers/twitter';
@@ -58,11 +58,10 @@ export async function runAgentPipeline(agentId: string = 'default_agent'): Promi
     console.warn('⚠️ GEMINI_API_KEY is missing in environment variables.');
     return {
       status: 'failed',
-      message: 'GEMINI_API_KEY is not configured in .env',
+      message: 'GEMINI_API_KEY is missing in Vercel environment variables. Please add GEMINI_API_KEY in Vercel Project Settings.',
     };
   }
 
-  const { GoogleGenAI } = await import('@google/genai');
   const ai = new GoogleGenAI({ apiKey });
 
   // 1. Fetch Agent Persona
