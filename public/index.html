@@ -1,460 +1,400 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Autonomous AI Creator — X (Twitter) Command Center</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-main: #0B0F19;
-      --bg-card: rgba(18, 24, 38, 0.75);
-      --bg-card-hover: rgba(26, 34, 52, 0.85);
-      --border-color: rgba(255, 255, 255, 0.08);
-      --border-accent: rgba(56, 189, 248, 0.3);
-      --accent-primary: #38bdf8;
-      --accent-glow: rgba(56, 189, 248, 0.2);
-      --accent-success: #10b981;
-      --accent-warning: #f59e0b;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --text-dim: #6b7280;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background-image: 
-        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.06) 0%, transparent 40%);
-    }
-
-    /* Header */
-    header {
-      border-bottom: 1px solid var(--border-color);
-      backdrop-filter: blur(12px);
-      background: rgba(11, 15, 25, 0.8);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      padding: 1rem 2rem;
-    }
-
-    .header-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo-badge {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .logo-icon {
-      width: 38px;
-      height: 38px;
-      background: linear-gradient(135deg, var(--accent-primary), #6366f1);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 1.2rem;
-      color: #fff;
-      box-shadow: 0 0 15px var(--accent-glow);
-    }
-
-    .logo-title h1 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-
-    .logo-title p {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    /* Actions Header */
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #0284c7, #2563eb);
-      color: #ffffff;
-      border: none;
-      padding: 0.65rem 1.25rem;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.5);
-    }
-
-    .btn-primary:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    /* Main Container */
-    main {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
-      width: 100%;
-      flex: 1;
-    }
-
-    /* Grid Layout */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 1.5rem;
-    }
-
-    @media (max-width: 900px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr;
+  <title>Autonomous AI Creator — Command Center</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#0f131d",
+            "surface-dim": "#0f131d",
+            "surface-bright": "#353944",
+            "surface-container-lowest": "#0a0e18",
+            "surface-container-low": "#171b26",
+            "surface-container": "#1c1f2a",
+            "surface-container-high": "#262a35",
+            "surface-container-highest": "#313540",
+            "on-surface": "#dfe2f1",
+            "on-surface-variant": "#cbc3d7",
+            "outline": "#958ea0",
+            "outline-variant": "#494454",
+            "primary": "#d0bcff",
+            "primary-container": "#a078ff",
+            "secondary": "#4cd7f6",
+            "secondary-container": "#03b5d3",
+            "tertiary": "#4edea3",
+            "tertiary-container": "#00a572",
+            "background": "#0f131d"
+          },
+          fontFamily: {
+            display: ["Plus Jakarta Sans", "sans-serif"],
+            body: ["Inter", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
       }
     }
+  </script>
 
-    /* Cards */
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1.25rem;
-      backdrop-filter: blur(8px);
-      margin-bottom: 1.25rem;
+  <style>
+    body {
+      background-color: #0B0F19;
+      color: #dfe2f1;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
     }
 
-    .card-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      margin-bottom: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    /* Status Items */
-    .status-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      font-size: 0.88rem;
-    }
-
-    .status-item:last-child {
-      border-bottom: none;
-    }
-
-    .badge-status {
-      padding: 0.2rem 0.55rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-
-    .badge-success {
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
-
-    .badge-warning {
-      background: rgba(245, 158, 11, 0.15);
-      color: #fbbf24;
-      border: 1px solid rgba(245, 158, 11, 0.3);
-    }
-
-    /* Form Fields */
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 0.35rem;
-    }
-
-    .form-control {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 0.55rem 0.75rem;
-      color: var(--text-main);
-      font-family: inherit;
-      font-size: 0.85rem;
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: var(--accent-primary);
-    }
-
-    /* Post Feed Cards */
-    .post-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1.25rem;
-      margin-bottom: 1rem;
-      transition: all 0.2s ease;
-    }
-
-    .post-card:hover {
-      border-color: var(--border-accent);
-      background: var(--bg-card-hover);
-    }
-
-    .post-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.75rem;
-    }
-
-    .post-topic {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--accent-primary);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .post-time {
-      font-size: 0.75rem;
-      color: var(--text-dim);
-    }
-
-    .post-banner {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 0.85rem;
+    .glass-panel {
+      background-color: rgba(30, 41, 59, 0.5);
+      backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      transition: transform 0.3s ease;
+      transition: all 0.25s ease-in-out;
     }
 
-    .post-card:hover .post-banner {
-      transform: scale(1.01);
+    .glass-panel:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: inset 0 0 15px rgba(139, 92, 246, 0.12);
     }
 
-    .post-content {
-      font-size: 0.95rem;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      margin-bottom: 1rem;
-      color: var(--text-main);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    .cyber-border:focus-within {
+      border-color: #06B6D4;
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.35);
     }
 
-    .post-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.8rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.04);
-      padding-top: 0.75rem;
+    .btn-glow:hover {
+      box-shadow: 0 0 16px rgba(139, 92, 246, 0.6);
+      transform: translateY(-1px);
     }
 
-    .post-rationale {
-      color: var(--text-muted);
-      font-size: 0.78rem;
-      font-style: italic;
-      max-width: 75%;
+    .node-active {
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+      border-color: #06B6D4;
     }
 
-    .link-x {
-      color: var(--accent-primary);
-      text-decoration: none;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0B0F19; }
+    ::-webkit-scrollbar-thumb { background: #313540; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #494454; }
 
-    .link-x:hover {
-      text-decoration: underline;
-    }
-
-    /* Notification banner */
-    #notification {
+    .toast-notification {
       position: fixed;
       bottom: 2rem;
       right: 2rem;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      background: #1e293b;
-      border: 1px solid var(--accent-primary);
-      color: #fff;
-      font-size: 0.9rem;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      z-index: 100;
       display: none;
-      z-index: 1000;
+      animation: fadeIn 0.3s ease;
     }
 
-    .spinner {
-      width: 14px;
-      height: 14px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
-<body>
+<body class="flex flex-col min-h-screen text-on-surface">
 
-  <header>
-    <div class="header-container">
-      <div class="logo-badge">
-        <div class="logo-icon">𝕏</div>
-        <div class="logo-title">
-          <h1>Autonomous AI Creator</h1>
-          <p>Multi-Stage Curation & X Auto-Publisher</p>
+  <!-- Top Navigation Bar -->
+  <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-20 bg-surface/70 backdrop-blur-md border-b border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#8B5CF6] to-[#06B6D4] flex items-center justify-center font-extrabold text-white text-xl shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+        𝕏
+      </div>
+      <div>
+        <span class="font-display font-bold text-xl tracking-tight text-primary drop-shadow-[0_0_8px_rgba(208,188,255,0.4)]">
+          AURA AI
+        </span>
+        <span class="text-xs font-mono text-outline uppercase tracking-wider block font-semibold">Command Center</span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-6">
+      <!-- Status Badges -->
+      <div class="hidden md:flex gap-4 items-center bg-surface-container-lowest/80 px-4 py-2 rounded-full border border-white/5">
+        <div class="flex items-center gap-2 font-mono text-xs text-on-surface-variant">
+          <div id="dotTurso" class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></div>
+          <span>Database: <strong id="lblTurso" class="text-tertiary">Connected</strong></span>
+        </div>
+        <div class="h-3 w-px bg-white/10"></div>
+        <div class="flex items-center gap-2 font-mono text-xs text-on-surface-variant">
+          <div id="dotGemini" class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></div>
+          <span>AI Engine: <strong id="lblGemini" class="text-tertiary">Active</strong></span>
+        </div>
+        <div class="h-3 w-px bg-white/10"></div>
+        <div class="flex items-center gap-2 font-mono text-xs text-on-surface-variant">
+          <div id="dotTwitter" class="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse"></div>
+          <span>X Publisher: <strong id="lblTwitter" class="text-secondary">Ready</strong></span>
         </div>
       </div>
-      <div class="header-actions">
-        <button id="btnTrigger" class="btn-primary" onclick="triggerPipeline()">
-          <span id="btnSpinner" class="spinner" style="display:none;"></span>
-          <span id="btnText">⚡ Trigger X Post Now</span>
-        </button>
+
+      <!-- Main Action CTA -->
+      <button id="btnTrigger" onclick="triggerPipeline()" class="bg-[#8B5CF6] hover:bg-[#7c3aed] text-white px-5 py-2.5 rounded-xl font-mono text-sm font-semibold flex items-center gap-2 transition-all btn-glow shadow-lg shadow-purple-500/25">
+        <span id="iconTrigger" class="material-symbols-outlined text-base">bolt</span>
+        <span id="btnText">Trigger X Post Now</span>
+      </button>
+
+      <div class="flex items-center gap-2 pl-2 border-l border-white/10">
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center text-white font-bold text-sm border border-white/20">
+          OP
+        </div>
       </div>
     </div>
   </header>
 
-  <main>
-    <div class="dashboard-grid">
+  <div class="flex flex-1 pt-20">
+
+    <!-- Left Navigation Rail -->
+    <nav class="hidden lg:flex fixed left-0 top-20 h-[calc(100vh-80px)] w-72 flex-col py-6 bg-surface-container-lowest/90 backdrop-blur-xl border-r border-white/10 z-40 overflow-y-auto">
       
-      <!-- Sidebar Controls -->
-      <aside>
-        <!-- System Health Card -->
-        <div class="card">
-          <div class="card-title">System Status</div>
-          
-          <div class="status-item">
-            <span>Gemini AI Engine</span>
-            <span id="stGemini" class="badge-status badge-warning">Checking...</span>
+      <div class="px-6 mb-6">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-9 h-9 rounded-lg bg-surface-container-high border border-white/10 flex items-center justify-center">
+            <span class="material-symbols-outlined text-secondary">memory</span>
           </div>
-          <div class="status-item">
-            <span>X (Twitter) SDK</span>
-            <span id="stTwitter" class="badge-status badge-warning">Checking...</span>
-          </div>
-          <div class="status-item">
-            <span>Turso Cloud DB</span>
-            <span id="stTurso" class="badge-status badge-success">Connected</span>
-          </div>
-          <div class="status-item">
-            <span>Posts Created</span>
-            <strong id="stCount" style="color: var(--accent-primary);">0</strong>
-          </div>
-          <div class="status-item">
-            <span>Vercel Cron</span>
-            <span class="badge-status badge-success">Hourly (0 * * * *)</span>
+          <div>
+            <h2 class="font-display font-bold text-sm text-on-surface">AUTONOMOUS CORE</h2>
+            <p class="font-mono text-xs text-outline">v1.2.0-live</p>
           </div>
         </div>
+      </div>
 
-        <!-- Persona Configuration Card -->
-        <div class="card">
-          <div class="card-title">Agent Persona</div>
-          <form id="personaForm" onsubmit="savePersona(event)">
-            <div class="form-group">
-              <label>Agent Name</label>
-              <input type="text" id="cfgName" class="form-control" placeholder="Aura AI Strategist">
+      <div class="flex-1 px-4 space-y-1">
+        <a href="#feedSection" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-secondary font-bold bg-secondary/10 border-r-2 border-secondary font-mono text-xs hover:bg-white/5 transition-colors">
+          <span class="material-symbols-outlined text-base">terminal</span> Live Story Feed
+        </a>
+        <a href="#personaSection" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-on-surface-variant font-mono text-xs hover:text-on-surface hover:bg-white/5 transition-colors">
+          <span class="material-symbols-outlined text-base">psychology</span> Persona Settings
+        </a>
+        <a href="#pipelineSection" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-on-surface-variant font-mono text-xs hover:text-on-surface hover:bg-white/5 transition-colors">
+          <span class="material-symbols-outlined text-base">account_tree</span> Logic Visualizer
+        </a>
+      </div>
+
+      <!-- Persona Config Widget -->
+      <div id="personaSection" class="mt-6 pt-6 border-t border-white/10 px-4">
+        <h3 class="font-mono text-xs text-outline mb-3 uppercase tracking-wider font-semibold">Agent Persona Settings</h3>
+        <form onsubmit="savePersona(event)" class="space-y-3">
+          <div>
+            <label class="block font-mono text-[11px] text-outline mb-1">Agent Name</label>
+            <div class="cyber-border rounded-lg bg-surface-container-low border border-white/10 px-3 py-1.5 flex items-center">
+              <input type="text" id="cfgName" class="bg-transparent border-none text-on-surface font-mono text-xs w-full focus:ring-0 p-0" placeholder="Aura AI Strategist">
             </div>
-            <div class="form-group">
-              <label>Target Domain</label>
-              <input type="text" id="cfgDomain" class="form-control" placeholder="AI, Machine Learning, Web3">
+          </div>
+
+          <div>
+            <label class="block font-mono text-[11px] text-outline mb-1">Target Domain</label>
+            <div class="cyber-border rounded-lg bg-surface-container-low border border-white/10 px-3 py-1.5 flex items-center">
+              <input type="text" id="cfgDomain" class="bg-transparent border-none text-on-surface font-mono text-xs w-full focus:ring-0 p-0" placeholder="AI, Machine Learning, Web3">
             </div>
-            <div class="form-group">
-              <label>Voice & Tone</label>
-              <input type="text" id="cfgTone" class="form-control" placeholder="Authoritative, Sharp, Insightful">
+          </div>
+
+          <div>
+            <label class="block font-mono text-[11px] text-outline mb-1">Voice & Tone</label>
+            <div class="cyber-border rounded-lg bg-surface-container-low border border-white/10 px-3 py-1.5 flex items-center">
+              <input type="text" id="cfgTone" class="bg-transparent border-none text-on-surface font-mono text-xs w-full focus:ring-0 p-0" placeholder="Authoritative, Sharp, Insightful">
             </div>
-            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
-              Save Persona Settings
+          </div>
+
+          <!-- Quick Presets -->
+          <div>
+            <label class="block font-mono text-[10px] text-outline mb-1">Tone Presets</label>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" onclick="applyPreset('Authoritative & Insightful')" class="px-2 py-0.5 rounded-md bg-purple-500/10 border border-purple-500/30 text-primary text-[10px] font-mono hover:bg-purple-500/20">#Authoritative</button>
+              <button type="button" onclick="applyPreset('Deep Technical Analyst')" class="px-2 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/30 text-secondary text-[10px] font-mono hover:bg-cyan-500/20">#Technical</button>
+              <button type="button" onclick="applyPreset('Casual Builder & Maverick')" class="px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-tertiary text-[10px] font-mono hover:bg-emerald-500/20">#Builder</button>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full mt-2 border border-primary text-primary hover:bg-primary/10 py-2 rounded-lg font-mono text-xs font-semibold transition-all btn-glow flex items-center justify-center gap-1.5">
+            <span class="material-symbols-outlined text-sm">save</span> Save Configuration
+          </button>
+        </form>
+      </div>
+    </nav>
+
+    <!-- Main Workspace Content -->
+    <main class="flex-1 ml-0 lg:ml-72 p-6 lg:p-10 overflow-y-auto">
+      <div class="max-w-7xl mx-auto space-y-8">
+
+        <!-- Page Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 class="font-display font-extrabold text-2xl lg:text-3xl text-on-surface tracking-tight">AI Command Center</h1>
+            <p class="font-body text-sm text-on-surface-variant">Real-time curation & autonomous Twitter publishing engine.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button onclick="loadFeed(); loadStatus();" class="px-4 py-2 rounded-xl bg-surface-container-high hover:bg-white/10 border border-white/10 text-on-surface font-mono text-xs flex items-center gap-2 transition-colors">
+              <span class="material-symbols-outlined text-base">refresh</span> Sync Workspace
             </button>
-          </form>
-        </div>
-      </aside>
-
-      <!-- Main Feed Section -->
-      <section>
-        <div class="card-title" style="margin-bottom: 1rem;">
-          <span>Live Generated Posts Feed</span>
-          <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-dim);" id="feedLastUpdated">Updated just now</span>
-        </div>
-
-        <div id="postsContainer">
-          <div class="card" style="text-align: center; color: var(--text-muted); padding: 3rem;">
-            Loading posts from Turso database...
           </div>
         </div>
-      </section>
 
-    </div>
-  </main>
+        <!-- Top Metrics Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-mono text-xs text-outline">Total Posts Published</span>
+              <span class="material-symbols-outlined text-primary">dynamic_feed</span>
+            </div>
+            <div id="statPostCount" class="font-display font-extrabold text-3xl text-on-surface">0</div>
+            <div class="mt-3 font-mono text-xs text-tertiary flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm">trending_up</span> Turso Cloud Sync
+            </div>
+          </div>
 
-  <div id="notification"></div>
+          <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-mono text-xs text-outline">X API Mode</span>
+              <span class="material-symbols-outlined text-secondary">share</span>
+            </div>
+            <div id="statTwitterMode" class="font-display font-bold text-lg text-secondary">Checking...</div>
+            <div class="mt-3 font-mono text-xs text-on-surface-variant flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm">verified</span> Standard OAuth 1.0a
+            </div>
+          </div>
 
+          <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-mono text-xs text-outline">Gemini Quality Score</span>
+              <span class="material-symbols-outlined text-[#06B6D4]">verified</span>
+            </div>
+            <div class="flex items-end justify-between">
+              <div class="font-display font-extrabold text-3xl text-on-surface">9.6<span class="text-sm text-outline font-normal">/10</span></div>
+              <div class="w-10 h-10 rounded-full border-4 border-surface-variant border-t-[#06B6D4] border-r-[#06B6D4] transform -rotate-45"></div>
+            </div>
+            <div class="mt-3 font-mono text-xs text-tertiary flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm">auto_awesome</span> Gemini 2.5 Flash Gate
+            </div>
+          </div>
+
+          <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-mono text-xs text-outline">Cron Schedule</span>
+              <span class="material-symbols-outlined text-outline">schedule</span>
+            </div>
+            <div class="font-mono font-bold text-lg text-on-surface">Hourly (0 * * * *)</div>
+            <div class="mt-3">
+              <div class="w-full bg-surface-variant rounded-full h-1.5">
+                <div class="bg-gradient-to-r from-secondary to-primary h-1.5 rounded-full" style="width: 75%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Middle: AI Curation Pipeline Visualizer -->
+        <div id="pipelineSection" class="glass-panel rounded-2xl p-6">
+          <h2 class="font-display font-bold text-lg text-on-surface mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary">account_tree</span> AI Curation Pipeline
+          </h2>
+          <div class="relative py-2">
+            <div class="absolute top-1/2 left-0 w-full h-0.5 bg-surface-variant -z-10 -translate-y-1/2"></div>
+            <div id="pipelineProgressLine" class="absolute top-1/2 left-0 w-3/4 h-0.5 bg-secondary -z-10 -translate-y-1/2 shadow-[0_0_10px_rgba(6,182,212,0.5)] transition-all duration-500"></div>
+            
+            <div class="flex justify-between items-center w-full">
+              <!-- Step 1 -->
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-11 h-11 rounded-full bg-surface-container-lowest border-2 border-secondary flex items-center justify-center node-active">
+                  <span class="material-symbols-outlined text-secondary text-lg">radar</span>
+                </div>
+                <span class="font-mono text-xs text-secondary font-semibold">1. Discovery</span>
+              </div>
+              <!-- Step 2 -->
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-11 h-11 rounded-full bg-surface-container-lowest border-2 border-secondary flex items-center justify-center node-active">
+                  <span class="material-symbols-outlined text-secondary text-lg">filter_alt</span>
+                </div>
+                <span class="font-mono text-xs text-secondary font-semibold">2. Deduplication</span>
+              </div>
+              <!-- Step 3 -->
+              <div class="flex flex-col items-center gap-2">
+                <div id="nodeGemini" class="w-11 h-11 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.6)]">
+                  <span class="material-symbols-outlined text-primary text-lg">auto_awesome</span>
+                </div>
+                <span class="font-mono text-xs text-primary font-bold">3. Gemini Gate</span>
+              </div>
+              <!-- Step 4 -->
+              <div class="flex flex-col items-center gap-2">
+                <div id="nodePublish" class="w-11 h-11 rounded-full bg-surface-container-lowest border-2 border-outline flex items-center justify-center">
+                  <span class="material-symbols-outlined text-outline text-lg">send</span>
+                </div>
+                <span class="font-mono text-xs text-outline font-semibold">4. X Publish</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom: Live Generated Posts Feed Section -->
+        <div id="feedSection" class="space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <h2 class="font-display font-bold text-xl text-on-surface">Live Generated Feed</h2>
+              <p class="font-mono text-xs text-outline" id="lblLastSync">Updated just now</p>
+            </div>
+            
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+              <!-- Live Search -->
+              <div class="cyber-border rounded-xl bg-surface-container-low border border-white/10 px-3 py-1.5 flex items-center w-full sm:w-64">
+                <span class="material-symbols-outlined text-outline text-sm mr-2">search</span>
+                <input type="text" id="feedSearchInput" oninput="filterPosts()" placeholder="Search posts..." class="bg-transparent border-none text-on-surface font-mono text-xs w-full focus:ring-0 p-0">
+              </div>
+
+              <!-- Filter Tabs -->
+              <div class="flex bg-surface-container-low rounded-xl p-1 border border-white/10">
+                <button onclick="setFilter('all')" id="btnFilterAll" class="px-3 py-1 rounded-lg bg-white/10 text-on-surface font-mono text-xs font-semibold">All</button>
+                <button onclick="setFilter('published')" id="btnFilterPublished" class="px-3 py-1 rounded-lg text-outline hover:text-on-surface font-mono text-xs font-semibold transition-colors">Published</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feed Posts Container -->
+          <div id="postsContainer" class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <div class="glass-panel rounded-2xl p-8 text-center text-outline col-span-full">
+              <span class="material-symbols-outlined text-3xl mb-2 animate-spin">sync</span>
+              <p class="font-mono text-xs">Loading live story feed from Turso Database...</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toastNotification" class="toast-notification bg-surface-container-high border border-primary/50 text-on-surface px-5 py-3 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.8)] flex items-center gap-3">
+    <span class="material-symbols-outlined text-primary text-xl">info</span>
+    <span id="toastMessage" class="font-mono text-xs">Notification message</span>
+  </div>
+
+  <!-- Client JavaScript -->
   <script>
+    let allPosts = [];
+    let currentFilter = 'all';
+
     async function loadStatus() {
       try {
         const res = await fetch('/api/agent/status');
         const data = await res.json();
         if (data.success) {
-          document.getElementById('stGemini').innerText = data.hasGeminiKey ? 'Active' : 'Missing Key';
-          document.getElementById('stGemini').className = `badge-status ${data.hasGeminiKey ? 'badge-success' : 'badge-warning'}`;
-          
-          document.getElementById('stTwitter').innerText = data.hasTwitterKeys ? 'Live Post Ready' : 'Simulated Mode';
-          document.getElementById('stTwitter').className = `badge-status ${data.hasTwitterKeys ? 'badge-success' : 'badge-warning'}`;
+          const lblGemini = document.getElementById('lblGemini');
+          const dotGemini = document.getElementById('dotGemini');
+          lblGemini.innerText = data.hasGeminiKey ? 'Active' : 'Missing Key';
+          dotGemini.className = `w-2.5 h-2.5 rounded-full ${data.hasGeminiKey ? 'bg-tertiary animate-pulse' : 'bg-amber-400'}`;
 
-          document.getElementById('stCount').innerText = data.postsCount || 0;
+          const lblTwitter = document.getElementById('lblTwitter');
+          const dotTwitter = document.getElementById('dotTwitter');
+          const statTwitterMode = document.getElementById('statTwitterMode');
+          lblTwitter.innerText = data.hasTwitterKeys ? 'Live API' : 'Simulated';
+          dotTwitter.className = `w-2.5 h-2.5 rounded-full ${data.hasTwitterKeys ? 'bg-secondary animate-pulse' : 'bg-amber-400'}`;
+          statTwitterMode.innerText = data.hasTwitterKeys ? 'Live Publishing' : 'Simulated Mode';
+
+          document.getElementById('statPostCount').innerText = data.postsCount || 0;
 
           if (data.agent) {
             document.getElementById('cfgName').value = data.agent.name || '';
@@ -463,7 +403,7 @@
           }
         }
       } catch (err) {
-        console.error('Error fetching status:', err);
+        console.error('Status fetch error:', err);
       }
     }
 
@@ -481,68 +421,140 @@
         ];
 
         if (data.success && data.posts.length > 0) {
-          container.innerHTML = data.posts.map((p, idx) => {
-            const bannerUrl = p.image_url || TECH_IMAGES[idx % TECH_IMAGES.length];
-            return `
-            <div class="post-card">
-              <div class="post-header">
-                <div class="post-topic">
-                  🌐 <a href="${p.topic_url || '#'}" target="_blank" style="color: inherit; text-decoration: none;">${escapeHtml(p.topic_title || 'Autonomous Story')}</a>
-                </div>
-                <div class="post-time">${new Date(p.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-              </div>
-              <img src="${bannerUrl}" class="post-banner" alt="Topic Banner" loading="lazy" />
-              <div class="post-content">${escapeHtml(p.content)}</div>
-              <div class="post-footer">
-                <div class="post-rationale">💡 ${escapeHtml(p.rationale || '')}</div>
-                <a href="${p.tweet_url || '#'}" target="_blank" class="link-x">
-                  ${(p.tweet_url && p.tweet_url.includes('intent')) ? '🚀 Post to 𝕏 ↗' : 'View on 𝕏 ↗'}
-                </a>
-              </div>
-            </div>
-          `}).join('');
+          allPosts = data.posts;
+          renderPosts(allPosts, TECH_IMAGES);
         } else {
           container.innerHTML = `
-            <div class="card" style="text-align: center; color: var(--text-muted); padding: 3rem;">
-              No posts generated yet. Click "⚡ Trigger X Post Now" above to run the pipeline!
+            <div class="glass-panel rounded-2xl p-10 text-center text-outline col-span-full">
+              <span class="material-symbols-outlined text-4xl mb-3 text-secondary">auto_awesome</span>
+              <p class="font-display font-semibold text-base text-on-surface mb-1">No posts generated yet</p>
+              <p class="font-mono text-xs text-outline mb-4">Click "Trigger X Post Now" in the header to run the AI pipeline!</p>
             </div>
           `;
         }
-        document.getElementById('feedLastUpdated').innerText = 'Updated ' + new Date().toLocaleTimeString();
+        document.getElementById('lblLastSync').innerText = 'Updated ' + new Date().toLocaleTimeString();
       } catch (err) {
-        console.error('Error loading feed:', err);
+        console.error('Feed load error:', err);
       }
+    }
+
+    function renderPosts(posts, images) {
+      const container = document.getElementById('postsContainer');
+      const filtered = posts.filter(p => {
+        const matchesFilter = currentFilter === 'all' || (currentFilter === 'published' && p.tweet_url);
+        const searchQuery = document.getElementById('feedSearchInput').value.toLowerCase();
+        const matchesSearch = !searchQuery || (p.content && p.content.toLowerCase().includes(searchQuery)) || (p.topic_title && p.topic_title.toLowerCase().includes(searchQuery));
+        return matchesFilter && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="glass-panel rounded-2xl p-8 text-center text-outline col-span-full">
+            <p class="font-mono text-xs">No posts matching search criteria.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map((p, idx) => {
+        const bannerUrl = p.image_url || images[idx % images.length];
+        const isLive = p.tweet_url && !p.tweet_url.includes('intent');
+
+        return `
+          <div class="glass-panel rounded-2xl p-5 flex flex-col gap-3 group">
+            <div class="flex justify-between items-start">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded bg-[#8B5CF6]/20 border border-[#8B5CF6]/40 flex items-center justify-center text-primary font-bold text-xs">𝕏</span>
+                <a href="${p.topic_url || '#'}" target="_blank" class="font-mono text-xs text-secondary hover:underline truncate max-w-[200px]">
+                  ${escapeHtml(p.topic_title || 'Autonomous Story')}
+                </a>
+              </div>
+              <span class="px-2 py-0.5 rounded bg-tertiary/15 text-tertiary border border-tertiary/30 font-mono text-[10px] font-bold tracking-wider">
+                ${isLive ? 'LIVE ON X' : 'GENERATED'}
+              </span>
+            </div>
+
+            <img src="${bannerUrl}" class="w-full h-40 object-cover rounded-xl border border-white/10 group-hover:scale-[1.01] transition-transform duration-300" loading="lazy" />
+
+            <p class="font-body text-sm text-on-surface leading-relaxed whitespace-pre-wrap">
+              ${escapeHtml(p.content)}
+            </p>
+
+            <div class="flex justify-between items-center text-xs font-mono text-outline pt-2 border-t border-white/5">
+              <span>${new Date(p.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+              <span>${(p.content || '').length}/280 chars</span>
+            </div>
+
+            <div class="pt-1">
+              <details class="group/det">
+                <summary class="flex items-center justify-between cursor-pointer list-none font-mono text-xs text-primary hover:text-primary-container transition-colors">
+                  <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">psychology</span> AI Curation Rationale</span>
+                  <span class="material-symbols-outlined transform group-open/det:rotate-180 transition-transform text-sm">expand_more</span>
+                </summary>
+                <div class="mt-2 p-3 bg-surface-container-lowest/80 rounded-xl border border-white/5 font-mono text-xs text-on-surface-variant">
+                  ${escapeHtml(p.rationale || 'Selected based on Gemini quality threshold scoring and topic relevance.')}
+                </div>
+              </details>
+            </div>
+
+            <div class="flex items-center justify-between pt-3 border-t border-white/5">
+              <button onclick="copyToClipboard('${escapeHtml(p.content).replace(/'/g, "\\'")}')" class="font-mono text-xs text-outline hover:text-on-surface flex items-center gap-1 transition-colors">
+                <span class="material-symbols-outlined text-sm">content_copy</span> Copy Text
+              </button>
+              
+              <a href="${p.tweet_url || '#'}" target="_blank" class="px-3 py-1.5 rounded-lg bg-[#8B5CF6]/20 hover:bg-[#8B5CF6]/30 text-primary border border-[#8B5CF6]/40 font-mono text-xs font-semibold flex items-center gap-1 transition-colors">
+                <span>${isLive ? 'View on 𝕏' : 'Post to 𝕏'}</span>
+                <span class="material-symbols-outlined text-sm">open_in_new</span>
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function setFilter(type) {
+      currentFilter = type;
+      document.getElementById('btnFilterAll').className = `px-3 py-1 rounded-lg font-mono text-xs font-semibold ${type === 'all' ? 'bg-white/10 text-on-surface' : 'text-outline hover:text-on-surface'}`;
+      document.getElementById('btnFilterPublished').className = `px-3 py-1 rounded-lg font-mono text-xs font-semibold ${type === 'published' ? 'bg-white/10 text-on-surface' : 'text-outline hover:text-on-surface'}`;
+      renderPosts(allPosts, []);
+    }
+
+    function filterPosts() {
+      renderPosts(allPosts, []);
     }
 
     async function triggerPipeline() {
       const btn = document.getElementById('btnTrigger');
-      const spinner = document.getElementById('btnSpinner');
+      const icon = document.getElementById('iconTrigger');
       const text = document.getElementById('btnText');
+      const nodeGemini = document.getElementById('nodeGemini');
 
       btn.disabled = true;
-      spinner.style.display = 'inline-block';
-      text.innerText = 'Curating & Posting to X...';
+      icon.className = 'material-symbols-outlined text-base animate-spin';
+      text.innerText = 'Curating Story...';
+      nodeGemini.className = 'w-11 h-11 rounded-full bg-primary/30 border-2 border-primary flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.9)] animate-pulse';
 
-      showNotification('🤖 Discovery & Gemini Quality Gate pipeline running...');
+      showToast('🤖 Pipeline triggered: Discovery & Gemini Quality Gate active...');
 
       try {
         const res = await fetch('/api/agent/trigger', { method: 'POST' });
         const data = await res.json();
 
         if (data.success && data.result.status === 'published') {
-          showNotification('✅ Successfully curated story & published to X!');
+          showToast('✅ Successfully curated & published story to X!');
           await loadFeed();
           await loadStatus();
         } else {
-          showNotification('⚠️ Pipeline message: ' + (data.result?.message || data.error || 'Done'));
+          showToast('⚠️ Pipeline note: ' + (data.result?.message || data.error || 'Execution finished.'));
         }
       } catch (err) {
-        showNotification('❌ Failed to execute pipeline.');
+        showToast('❌ Failed to trigger pipeline.');
         console.error(err);
       } finally {
         btn.disabled = false;
-        spinner.style.display = 'none';
-        text.innerText = '⚡ Trigger X Post Now';
+        icon.className = 'material-symbols-outlined text-base';
+        text.innerText = 'Trigger X Post Now';
+        nodeGemini.className = 'w-11 h-11 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.6)]';
       }
     }
 
@@ -560,18 +572,29 @@
         });
         const data = await res.json();
         if (data.success) {
-          showNotification('✅ Persona settings updated!');
+          showToast('✅ Persona settings updated!');
         }
       } catch (err) {
-        showNotification('❌ Failed to update persona.');
+        showToast('❌ Failed to save persona.');
       }
     }
 
-    function showNotification(msg) {
-      const el = document.getElementById('notification');
-      el.innerText = msg;
-      el.style.display = 'block';
-      setTimeout(() => { el.style.display = 'none'; }, 4000);
+    function applyPreset(tone) {
+      document.getElementById('cfgTone').value = tone;
+      showToast(`Selected tone preset: ${tone}`);
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text);
+      showToast('📋 Copied tweet text to clipboard!');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      const message = document.getElementById('toastMessage');
+      message.innerText = msg;
+      toast.style.display = 'flex';
+      setTimeout(() => { toast.style.display = 'none'; }, 4000);
     }
 
     function escapeHtml(text) {
@@ -579,7 +602,7 @@
       return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    // Initial load
+    // Init
     loadStatus();
     loadFeed();
   </script>
