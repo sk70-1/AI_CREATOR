@@ -141,11 +141,16 @@
         </div>
       </div>
 
-      <!-- Main Trigger Action CTA -->
-      <button id="btnTrigger" onclick="triggerPipeline()" class="bg-[#8B5CF6] hover:bg-[#7c3aed] text-white px-5 py-2.5 rounded-xl font-mono text-sm font-semibold flex items-center gap-2 transition-all btn-glow shadow-lg shadow-purple-500/25">
-        <span id="iconTrigger" class="material-symbols-outlined text-base">bolt</span>
-        <span id="btnText">Trigger Agent Run</span>
-      </button>
+      <!-- Main Trigger Action CTA with Persona Selector -->
+      <div class="flex items-center gap-2">
+        <select id="selectPersonaRun" title="Select Persona for News Creation" class="bg-surface-container-low text-on-surface font-mono text-xs border border-white/10 rounded-xl px-3 py-2.5 focus:ring-1 focus:ring-primary cursor-pointer hover:bg-white/5 transition-colors">
+          <option value="">⚡ Active Persona</option>
+        </select>
+        <button id="btnTrigger" onclick="triggerPipeline()" class="bg-[#8B5CF6] hover:bg-[#7c3aed] text-white px-5 py-2.5 rounded-xl font-mono text-sm font-semibold flex items-center gap-2 transition-all btn-glow shadow-lg shadow-purple-500/25">
+          <span id="iconTrigger" class="material-symbols-outlined text-base">bolt</span>
+          <span id="btnText">Trigger Agent Run</span>
+        </button>
+      </div>
 
       <div class="flex items-center gap-2 pl-2 border-l border-white/10">
         <div class="w-9 h-9 rounded-full bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center text-white font-bold text-sm border border-white/20">
@@ -344,35 +349,57 @@
 
         <!-- TAB 2: AGENT PERSONAS VIEW -->
         <div id="tab-agentPersonas" class="tab-content space-y-8">
-          <div>
-            <h1 class="font-display font-extrabold text-2xl lg:text-3xl text-on-surface tracking-tight">Agent Personas</h1>
-            <p class="font-body text-sm text-on-surface-variant">Configure agent identity, voice parameters, and domain alignment.</p>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h1 class="font-display font-extrabold text-2xl lg:text-3xl text-on-surface tracking-tight">Agent Personas</h1>
+              <p class="font-body text-sm text-on-surface-variant">Create and manage AI identities, set active personas, or choose one when creating news.</p>
+            </div>
+            <button onclick="resetPersonaForm(); document.getElementById('personaFormSection').scrollIntoView({ behavior: 'smooth' });" class="px-4 py-2 rounded-xl bg-primary/20 hover:bg-primary/30 border border-primary/40 text-primary font-mono text-xs flex items-center gap-2 font-bold transition-all">
+              <span class="material-symbols-outlined text-base">add_circle</span> + Create New Persona
+            </button>
           </div>
 
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Personas Card List -->
+          <div>
+            <h2 class="font-display font-bold text-lg text-on-surface mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-secondary">groups</span> Available Agent Personas
+            </h2>
+            <div id="personasCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <!-- Dynamically rendered persona cards -->
+            </div>
+          </div>
+
+          <!-- Persona Editor & Form -->
+          <div id="personaFormSection" class="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-6 border-t border-white/10">
             <!-- Left: Persona Editor Form -->
             <div class="lg:col-span-2 glass-panel rounded-2xl p-6">
-              <h2 class="font-display font-bold text-lg text-on-surface mb-6 flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary">edit</span> Edit Persona Parameters
-              </h2>
+              <div class="flex justify-between items-center mb-6">
+                <h2 class="font-display font-bold text-lg text-on-surface flex items-center gap-2" id="formHeaderTitle">
+                  <span class="material-symbols-outlined text-primary">edit</span> Edit Persona Parameters
+                </h2>
+                <button type="button" id="btnCancelEdit" onclick="resetPersonaForm()" class="text-outline hover:text-on-surface font-mono text-xs hidden items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">close</span> Cancel Editing
+                </button>
+              </div>
+
               <form onsubmit="savePersona(event)" class="space-y-5">
                 <div>
                   <label class="block font-mono text-xs text-outline mb-2">Agent Name</label>
                   <div class="cyber-border rounded-xl bg-surface-container-low border border-white/10 px-4 py-2 flex items-center">
-                    <input type="text" id="cfgName" class="bg-transparent border-none text-on-surface font-mono text-sm w-full focus:ring-0 p-0" placeholder="Aura AI Strategist">
+                    <input type="text" id="cfgName" required class="bg-transparent border-none text-on-surface font-mono text-sm w-full focus:ring-0 p-0" placeholder="Aura AI Strategist" oninput="updateFormPreview()">
                   </div>
                 </div>
 
                 <div>
                   <label class="block font-mono text-xs text-outline mb-2">Target Domain & Topics</label>
                   <div class="cyber-border rounded-xl bg-surface-container-low border border-white/10 px-4 py-2 flex items-center">
-                    <input type="text" id="cfgDomain" class="bg-transparent border-none text-on-surface font-mono text-sm w-full focus:ring-0 p-0" placeholder="AI, Machine Learning, Web3, Distributed Systems">
+                    <input type="text" id="cfgDomain" required class="bg-transparent border-none text-on-surface font-mono text-sm w-full focus:ring-0 p-0" placeholder="AI, Machine Learning, Web3, Distributed Systems" oninput="updateFormPreview()">
                   </div>
                 </div>
 
                 <div>
                   <label class="block font-mono text-xs text-outline mb-2">Voice & Tone Instructions</label>
-                  <textarea id="cfgTone" rows="4" class="w-full rounded-xl bg-surface-container-low border border-white/10 p-3 text-on-surface font-mono text-xs focus:ring-0 focus:border-secondary" placeholder="Authoritative, sharp, technical, concise, futuristic visionary..."></textarea>
+                  <textarea id="cfgTone" rows="4" required class="w-full rounded-xl bg-surface-container-low border border-white/10 p-3 text-on-surface font-mono text-xs focus:ring-0 focus:border-secondary" placeholder="Authoritative, sharp, technical, concise, futuristic visionary..." oninput="updateFormPreview()"></textarea>
                 </div>
 
                 <div>
@@ -385,9 +412,11 @@
                   </div>
                 </div>
 
-                <button type="submit" class="px-6 py-3 rounded-xl bg-primary hover:bg-primary-container text-surface font-mono text-xs font-bold transition-all btn-glow flex items-center gap-2">
-                  <span class="material-symbols-outlined text-base">save</span> Save Persona Settings
-                </button>
+                <div class="flex items-center gap-3 pt-2">
+                  <button type="submit" id="btnSavePersona" class="px-6 py-3 rounded-xl bg-primary hover:bg-primary-container text-surface font-mono text-xs font-bold transition-all btn-glow flex items-center gap-2">
+                    <span class="material-symbols-outlined text-base">save</span> Save Persona Settings
+                  </button>
+                </div>
               </form>
             </div>
 
@@ -583,6 +612,8 @@
   <script>
     let allPosts = [];
     let currentFilter = 'all';
+    let allPersonas = [];
+    let editingPersonaId = null;
 
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -627,20 +658,202 @@
           document.getElementById('statPostCount').innerText = data.postsCount || 0;
 
           if (data.agent) {
-            document.getElementById('cfgName').value = data.agent.name || '';
-            document.getElementById('cfgDomain').value = data.agent.domain || '';
-            document.getElementById('cfgTone').value = data.agent.tone || '';
-            
             document.getElementById('navAgentName').innerText = data.agent.name || 'Aura AI Strategist';
             document.getElementById('navAgentDomain').innerText = data.agent.domain || 'AI, Machine Learning';
             
-            document.getElementById('previewName').innerText = data.agent.name || 'Aura AI Strategist';
-            document.getElementById('previewDomain').innerText = data.agent.domain || 'AI, Machine Learning';
-            document.getElementById('previewTone').innerText = `"${data.agent.tone || 'Authoritative, sharp, insightful'}"`;
+            if (!editingPersonaId) {
+              document.getElementById('cfgName').value = data.agent.name || '';
+              document.getElementById('cfgDomain').value = data.agent.domain || '';
+              document.getElementById('cfgTone').value = data.agent.tone || '';
+
+              document.getElementById('previewName').innerText = data.agent.name || 'Aura AI Strategist';
+              document.getElementById('previewDomain').innerText = data.agent.domain || 'AI, Machine Learning';
+              document.getElementById('previewTone').innerText = `"${data.agent.tone || 'Authoritative, sharp, insightful'}"`;
+            }
+          }
+
+          if (data.agents) {
+            allPersonas = data.agents;
+            renderPersonas();
           }
         }
       } catch (err) {
         console.error('Status fetch error:', err);
+      }
+    }
+
+    function renderPersonas() {
+      const grid = document.getElementById('personasCardsGrid');
+      const selectRun = document.getElementById('selectPersonaRun');
+      if (!grid) return;
+
+      if (selectRun) {
+        const currentSelected = selectRun.value;
+        selectRun.innerHTML = '<option value="">⚡ Active Persona</option>' +
+          allPersonas.map(p => `<option value="${p.id}" ${p.is_active ? 'selected' : ''}>🤖 ${escapeHtml(p.name)} (${p.is_active ? 'Active' : 'Select'})</option>`).join('');
+        if (currentSelected && allPersonas.some(p => p.id === currentSelected)) {
+          selectRun.value = currentSelected;
+        }
+      }
+
+      if (allPersonas.length === 0) {
+        grid.innerHTML = '<div class="col-span-full text-center font-mono text-xs text-outline p-6">No personas created yet.</div>';
+        return;
+      }
+
+      grid.innerHTML = allPersonas.map(p => {
+        const isActive = Boolean(p.is_active);
+        return `
+          <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between border ${isActive ? 'border-primary/50 shadow-lg shadow-purple-500/10' : 'border-white/10'} relative group">
+            <div>
+              <div class="flex justify-between items-start mb-3">
+                <div class="w-10 h-10 rounded-xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary text-xl">
+                  🤖
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold ${isActive ? 'bg-tertiary/20 text-tertiary border border-tertiary/30' : 'bg-white/10 text-outline'}">
+                  ${isActive ? '★ ACTIVE' : 'INACTIVE'}
+                </span>
+              </div>
+              <h3 class="font-display font-bold text-base text-on-surface truncate">${escapeHtml(p.name)}</h3>
+              <p class="font-mono text-xs text-secondary mt-0.5 truncate">${escapeHtml(p.domain)}</p>
+              <p class="font-mono text-xs text-on-surface-variant/80 mt-3 p-3 bg-surface-container-low rounded-xl border border-white/5 line-clamp-3">
+                "${escapeHtml(p.tone)}"
+              </p>
+            </div>
+
+            <div class="pt-4 mt-4 border-t border-white/10 flex items-center justify-between gap-2">
+              ${!isActive ? `
+                <button onclick="selectActivePersona('${p.id}')" class="px-3 py-1.5 rounded-lg bg-tertiary/20 hover:bg-tertiary/30 text-tertiary font-mono text-xs font-semibold flex items-center gap-1 transition-colors">
+                  <span class="material-symbols-outlined text-sm">check_circle</span> Set Active
+                </button>
+              ` : `
+                <span class="font-mono text-[11px] text-tertiary font-semibold flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">verified</span> Active Selection
+                </span>
+              `}
+
+              <div class="flex items-center gap-1">
+                <button onclick="prepareEditPersona('${p.id}')" title="Edit Persona" class="p-1.5 rounded-lg text-outline hover:text-on-surface hover:bg-white/10 transition-colors">
+                  <span class="material-symbols-outlined text-base">edit</span>
+                </button>
+                ${allPersonas.length > 1 ? `
+                  <button onclick="deletePersona('${p.id}')" title="Delete Persona" class="p-1.5 rounded-lg text-outline hover:text-red-400 hover:bg-red-500/10 transition-colors">
+                    <span class="material-symbols-outlined text-base">delete</span>
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function selectActivePersona(id) {
+      try {
+        const res = await fetch(`/api/agent/personas/${id}/select`, { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          showToast('✅ Active persona updated successfully!');
+          await loadStatus();
+        } else {
+          showToast('❌ Failed to select active persona.');
+        }
+      } catch (err) {
+        showToast('❌ Error setting active persona.');
+      }
+    }
+
+    async function deletePersona(id) {
+      if (!confirm('Are you sure you want to delete this persona?')) return;
+      try {
+        const res = await fetch(`/api/agent/personas/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          showToast('✅ Persona deleted.');
+          if (editingPersonaId === id) resetPersonaForm();
+          await loadStatus();
+        } else {
+          showToast('❌ ' + (data.error || 'Failed to delete persona'));
+        }
+      } catch (err) {
+        showToast('❌ Error deleting persona.');
+      }
+    }
+
+    function prepareEditPersona(id) {
+      const persona = allPersonas.find(p => p.id === id);
+      if (!persona) return;
+
+      editingPersonaId = id;
+      document.getElementById('cfgName').value = persona.name;
+      document.getElementById('cfgDomain').value = persona.domain;
+      document.getElementById('cfgTone').value = persona.tone;
+
+      document.getElementById('formHeaderTitle').innerHTML = `<span class="material-symbols-outlined text-primary">edit</span> Edit Persona: ${escapeHtml(persona.name)}`;
+      document.getElementById('btnCancelEdit').classList.remove('hidden');
+      document.getElementById('btnCancelEdit').classList.add('flex');
+      document.getElementById('btnSavePersona').innerHTML = `<span class="material-symbols-outlined text-base">save</span> Update Persona`;
+
+      updateFormPreview();
+      document.getElementById('personaFormSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function resetPersonaForm() {
+      editingPersonaId = null;
+      document.getElementById('cfgName').value = '';
+      document.getElementById('cfgDomain').value = '';
+      document.getElementById('cfgTone').value = '';
+
+      document.getElementById('formHeaderTitle').innerHTML = `<span class="material-symbols-outlined text-primary">add_circle</span> Create New Agent Persona`;
+      document.getElementById('btnCancelEdit').classList.add('hidden');
+      document.getElementById('btnCancelEdit').classList.remove('flex');
+      document.getElementById('btnSavePersona').innerHTML = `<span class="material-symbols-outlined text-base">add</span> Create Persona`;
+
+      updateFormPreview();
+    }
+
+    function updateFormPreview() {
+      const name = document.getElementById('cfgName').value || 'New AI Strategist';
+      const domain = document.getElementById('cfgDomain').value || 'AI & Tech Trends';
+      const tone = document.getElementById('cfgTone').value || 'Authoritative & Insightful voice.';
+
+      document.getElementById('previewName').innerText = name;
+      document.getElementById('previewDomain').innerText = domain;
+      document.getElementById('previewTone').innerText = `"${tone}"`;
+    }
+
+    async function savePersona(e) {
+      e.preventDefault();
+      const name = document.getElementById('cfgName').value;
+      const domain = document.getElementById('cfgDomain').value;
+      const tone = document.getElementById('cfgTone').value;
+
+      try {
+        let res, data;
+        if (editingPersonaId) {
+          res = await fetch(`/api/agent/personas/${editingPersonaId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, domain, tone })
+          });
+        } else {
+          res = await fetch('/api/agent/personas', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, domain, tone })
+          });
+        }
+
+        data = await res.json();
+        if (data.success) {
+          showToast(editingPersonaId ? '✅ Persona updated!' : '✅ New persona created!');
+          resetPersonaForm();
+          await loadStatus();
+        } else {
+          showToast('❌ ' + (data.error || 'Failed to save persona'));
+        }
+      } catch (err) {
+        showToast('❌ Failed to save persona.');
       }
     }
 
@@ -764,18 +977,26 @@
       const btn = document.getElementById('btnTrigger');
       const icon = document.getElementById('iconTrigger');
       const text = document.getElementById('btnText');
-      const consoleOut = document.getElementById('consoleLogOutput');
+
+      const selectedAgentId = document.getElementById('selectPersonaRun')?.value || '';
 
       btn.disabled = true;
       icon.className = 'material-symbols-outlined text-base animate-spin';
       text.innerText = 'Curating...';
 
       appendConsoleLog('[TRIGGER] Manual pipeline run started...', 'text-purple-400');
+      if (selectedAgentId) {
+        appendConsoleLog(`[PERSONA] Running with persona ID: ${selectedAgentId}`, 'text-purple-300');
+      }
       appendConsoleLog('[DISCOVERY] Scraping tech feeds and RSS topics...', 'text-cyan-400');
       showToast('🤖 Discovery & Gemini Quality Gate pipeline running...');
 
       try {
-        const res = await fetch('/api/agent/trigger', { method: 'POST' });
+        const res = await fetch('/api/agent/trigger', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ agentId: selectedAgentId })
+        });
         const data = await res.json();
 
         if (data.success && data.result.status === 'published') {
@@ -799,30 +1020,9 @@
       }
     }
 
-    async function savePersona(e) {
-      e.preventDefault();
-      const name = document.getElementById('cfgName').value;
-      const domain = document.getElementById('cfgDomain').value;
-      const tone = document.getElementById('cfgTone').value;
-
-      try {
-        const res = await fetch('/api/agent/config', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, domain, tone })
-        });
-        const data = await res.json();
-        if (data.success) {
-          showToast('✅ Persona settings updated!');
-          await loadStatus();
-        }
-      } catch (err) {
-        showToast('❌ Failed to save persona.');
-      }
-    }
-
     function applyPreset(tone) {
       document.getElementById('cfgTone').value = tone;
+      updateFormPreview();
       showToast(`Selected tone preset: ${tone}`);
     }
 

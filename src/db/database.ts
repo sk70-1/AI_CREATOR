@@ -42,9 +42,17 @@ export async function initDatabase(): Promise<void> {
       domain TEXT NOT NULL,
       tone TEXT NOT NULL,
       mode TEXT NOT NULL DEFAULT 'autonomous',
+      is_active INTEGER DEFAULT 0,
       created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     )
   `);
+
+  // Migration: Try adding is_active column if table existed without it
+  try {
+    await client.execute(`ALTER TABLE agents ADD COLUMN is_active INTEGER DEFAULT 0`);
+  } catch {
+    // Column already exists or error ignored
+  }
 
   await client.execute(`
     CREATE TABLE IF NOT EXISTS posts (
@@ -80,18 +88,25 @@ export async function initDatabase(): Promise<void> {
 
   if (existingAgent.rows.length === 0) {
     await client.execute({
-      sql: `INSERT INTO agents (id, name, domain, tone, mode, created_at)
-            VALUES (?, ?, ?, ?, ?, ?)`,
+      sql: `INSERT INTO agents (id, name, domain, tone, mode, is_active, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`,
       args: [
         'default_agent',
         'Aura Tech & AI Strategist',
         'AI, Machine Learning, Web3, & Future Tech Trends',
         'Insightful, Authoritative, Sharp, & Thought-Provoking',
         'autonomous',
+        1,
         new Date().toISOString(),
       ],
     });
     console.log('🌱 Seeded default agent configuration into database.');
+  }
+
+  // Ensure at least one persona is active
+  const activeAgentCheck = await client.execute('SELECT id FROM agents WHERE is_active = 1');
+  if (activeAgentCheck.rows.length === 0) {
+    await client.execute("UPDATE agents SET is_active = 1 WHERE id = 'default_agent'");
   }
 
   isInitialized = true;

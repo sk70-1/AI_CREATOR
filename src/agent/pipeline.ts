@@ -62,12 +62,16 @@ export async function runAgentPipeline(agentId: string = 'default_agent'): Promi
   const ai = new GoogleGenAI({ apiKey });
 
   // 1. Fetch Agent Persona
-  const agentResult = await db.execute({
-    sql: 'SELECT * FROM agents WHERE id = ?',
-    args: [agentId],
-  });
+  let agentResult = agentId
+    ? await db.execute({ sql: 'SELECT * FROM agents WHERE id = ?', args: [agentId] })
+    : await db.execute('SELECT * FROM agents WHERE is_active = 1 LIMIT 1');
+
+  if (agentResult.rows.length === 0 && agentId) {
+    agentResult = await db.execute('SELECT * FROM agents WHERE is_active = 1 LIMIT 1');
+  }
 
   const agent = agentResult.rows[0] || {
+    id: agentId || 'default_agent',
     name: 'Aura Tech & AI Strategist',
     domain: 'AI, Machine Learning, Web3, & Future Tech Trends',
     tone: 'Insightful, Authoritative, Sharp, & Thought-Provoking',
