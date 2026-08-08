@@ -1,6 +1,6 @@
 # 🤖 AI-Usage Log & Vibe Coding Transcript (`PROMPTS.md`)
 
-> **Verification**: This repository was 100% vibe-coded using **Antigravity AI Agent** and **Google Gemini 2.5 Flash**. Below is the complete log of user prompts, prompt engineering iterations, architecture design choices, and deployment trajectory.
+> **Verification**: This repository was 100% vibe-coded using **Antigravity AI Agent**, **Google Gemini 2.5 Flash**, and **Stitch MCP**. Below is the complete log of user prompts, prompt engineering iterations, architecture design choices, and deployment trajectory.
 
 ---
 
@@ -13,8 +13,8 @@ graph TD
     C -->|Topic Selection & Curation| D[Multi-Stage Quality Gate]
     D -->|Draft Tweet & Self-Critique| E[Publisher Layer]
     E -->|API v2 / v1.1 / 1-Click Intent| F[X / Twitter Platform]
-    E -->|Save Post & Rationale| G[Database Store]
-    G -->|Render Live Feed| H[Glassmorphic Control Dashboard]
+    E -->|Save Post & Rationale| G[Turso Cloud LibSQL DB]
+    G -->|Render Live Feed| H[Stitch MCP Aura AI Command Suite]
 ```
 
 ---
@@ -85,14 +85,30 @@ graph TD
 
 ---
 
+### Phase 7: Turso Cloud LibSQL DB Integration
+* **User Prompt**: *"Adding Database To Project / Migrate to Turso"*
+* **AI Action**: Integrated Turso Cloud LibSQL Client (`@libsql/client`) in `src/db/database.ts`, created automated table initialization for `agents`, `posts`, and `topic_history`, and eliminated local SQLite `.db` file dependencies for serverless cloud persistence.
+
+---
+
+### Phase 8: Stitch MCP & Aura AI Command Suite Integration
+* **User Prompt**: *"i added the stitch MCP api / i want to change the dashboard of this webapp from my stitch mcp but you didnt add all the things from aura ai"*
+* **AI Action**:
+  1. Connected Stitch MCP server and queried user's **Aura AI Command Center** (`projects/9637302430958561063`) project.
+  2. Downloaded and parsed all 5 screen layouts: Command Center, Agent Personas, Logic Pipeline, Execution Logs, and System Settings.
+  3. Implemented a responsive single-page application suite in `public/index.html` with real-time Express REST API integration (`/api/agent/*`), search filters, copy actions, and live execution logging.
+  4. Cleaned up obsolete local files (`local.db`, temporary scratch scripts) and pushed commit to GitHub for automatic Vercel deployment.
+
+---
+
 ## 🛠️ Stack & Tech Specs
 
-- **AI Model**: Google Gemini 2.5 Flash (`@google/genai`)
-- **Backend**: Node.js, Express, TypeScript, `tsx`
-- **Database**: SQLite / Turso Client (`@libsql/client`) + Serverless Pure-JS Fallback Driver
+- **AI Engine & Design**: Google Gemini 2.5 Flash (`@google/genai`) + Stitch MCP Server
+- **Backend & API**: Node.js, Express, TypeScript, `tsx`
+- **Database**: Turso Cloud LibSQL Database (`@libsql/client`)
 - **Publishing**: `twitter-api-v2` + Web Intent Share Protocol
 - **Deployment**: Vercel Serverless Functions + Vercel Cron (`0 9 * * *`)
-- **Frontend**: Vanilla CSS Glassmorphism + HTML5 + Web Components
+- **Frontend**: Stitch Obsidian Dark Theme + Tailwind CSS + Google Fonts (*Plus Jakarta Sans*, *Inter*, *JetBrains Mono*)
 
 ---
 

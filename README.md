@@ -1,8 +1,6 @@
-# 🚀 Autonomous AI Creator & X Publisher
+# 🚀 Autonomous AI Creator & X Publisher — Aura AI Suite
 
-> **Autonomous Tech News Curator & Social Media Publisher** powered by **Google Gemini 2.5 Flash**, **TypeScript**, **Express**, and **Vercel Serverless Functions**.
-
-![Live Control Dashboard](public/index.html)
+> **Autonomous Tech News Curator & Social Media Publisher** powered by **Stitch MCP**, **Google Gemini 2.5 Flash**, **Turso Cloud LibSQL DB**, **TypeScript**, **Express**, and **Vercel Serverless Functions**.
 
 ---
 
@@ -10,12 +8,18 @@
 
 - 📰 **Autonomous Content Discovery**: Scrapes top developer stories from **HackerNews API** and curated **Tech RSS feeds** (TechCrunch, Ars Technica, The Verge).
 - 🧠 **Gemini 2.5 Flash Quality Gate**: Multi-stage LLM pipeline that filters tech news, curates high-impact topics, drafts viral posts/threads, and performs automated self-critiques.
-- 💬 **Vibrant Emojis & Visual Cards**: Generates punchy, formatted posts with expressive emojis and high-resolution tech cover banners.
+- 🎨 **Stitch MCP "Aura AI" Command Center Suite**:
+  - 📊 **Command Center View**: Real-time stat cards (Total Posts, Topics Curated, Quality Score `9.6/10`, Next Cron Run), animated AI Curation Pipeline, and Live Published Feed with instant search & category filters.
+  - 🧠 **Agent Personas View**: Active agent identity preview card, full persona configuration form, and quick tone presets (`#Authoritative`, `#Technical`, `#Builder`, `#Visionary`).
+  - ⚡ **Logic Pipeline View**: Interactive 4-stage processing visualizer (Discovery ➔ Deduplication ➔ Gemini Gate ➔ X Publish).
+  - 📟 **Execution Logs View**: Live streaming execution terminal with timestamps (`[SYS_INIT]`, `[TURSO_DB]`, `[GEMINI_GATE]`, `[X_PUBLISH]`) and Clear Console action.
+  - ⚙️ **System Settings View**: Real-time integration status cards for Gemini API, X OAuth API, Turso Cloud DB, and Vercel Cron.
+- ☁️ **Turso Cloud LibSQL Database**: High-performance cloud SQLite database persistence for serverless Lambdas and local development.
+- 💬 **Formatted Posts & Banner Cards**: Generates punchy posts with 2-4 vibrant emojis, character counters (`240/280`), collapsible **AI Curation Rationale**, and cover banners.
 - 🐦 **Multi-Tier X (Twitter) Publishing**:
   - **Direct API v2 / v1.1**: Automates direct tweeting if developer credentials are active.
-  - **1-Click Intent Share**: Generates a 1-click `https://x.com/intent/post` share link when on Free/Pay-per-use X tiers—100% free with zero character limits!
-- 🎨 **Glassmorphic Control Center**: Live responsive dark-mode dashboard displaying real-time agent persona settings, system status badges, and generated post cards.
-- ⏱️ **Vercel Cron Automation**: Runs automatically once daily on Vercel's Free Hobby plan (`0 9 * * *`).
+  - **1-Click Intent Share**: Generates 1-click `https://x.com/intent/post` share links for non-premium accounts.
+- ⏱️ **Vercel Cron Automation**: Runs automatically once daily on Vercel's Hobby plan (`0 9 * * *`).
 
 ---
 
@@ -26,19 +30,21 @@ AI_CREATOR/
 ├── api/
 │   └── index.ts            # Vercel Serverless Function entry point
 ├── public/
-│   └── index.html          # Glassmorphic Control Panel Dashboard
+│   └── index.html          # Stitch MCP Aura AI Command Center Suite (5 Views)
 ├── src/
 │   ├── agent/
 │   │   ├── discovery.ts    # News scraper (HackerNews API & RSS Feeds)
 │   │   └── pipeline.ts     # Gemini 2.5 Flash curation & quality gate
 │   ├── db/
-│   │   └── database.ts     # SQLite / Turso / Serverless Pure-JS DB Driver
+│   │   └── database.ts     # Turso Cloud LibSQL Database Client (@libsql/client)
 │   ├── publishers/
 │   │   └── twitter.ts      # X (Twitter) API v2 / v1.1 & Intent URL publisher
 │   ├── routes/
 │   │   └── api.ts          # Express REST API endpoints
 │   ├── app.ts              # Express application initializer
 │   └── index.ts            # Local development server entry point
+├── scratch/
+│   └── view_db.ts          # Terminal DB inspector utility (`npm run db:view`)
 ├── .env                    # Local environment variables
 ├── PROMPTS.md              # AI-Usage log & vibe-coding transcript
 ├── vercel.json             # Vercel rewrites & cron configuration
@@ -61,6 +67,10 @@ Create a `.env` file in the root directory:
 ```env
 # Google Gemini API Key (Get your free key from https://aistudio.google.com/)
 GEMINI_API_KEY=your_gemini_api_key_here
+
+# Turso Cloud LibSQL Database Configuration
+TURSO_DATABASE_URL=libsql://your-database-name.turso.io
+TURSO_AUTH_TOKEN=your_turso_auth_token
 
 # X (Twitter) API Credentials (Optional)
 TWITTER_API_KEY=your_twitter_api_key
@@ -91,9 +101,11 @@ npm run db:view
 ## 🌐 Deploying Live to Vercel
 
 1. Push your repository to GitHub (`sk70-1/AI_CREATOR`).
-2. Go to **[vercel.com/new](https://vercel.com/new)** and import your repository.
+2. Go to **[vercel.com/new](https://vercel.com/new)** and import your repository (or run `npx vercel --prod`).
 3. Under **Project Settings -> Environment Variables**, add:
    - `GEMINI_API_KEY`
+   - `TURSO_DATABASE_URL`
+   - `TURSO_AUTH_TOKEN`
    - `TWITTER_API_KEY`
    - `TWITTER_API_SECRET`
    - `TWITTER_ACCESS_TOKEN`
@@ -105,5 +117,5 @@ npm run db:view
 
 ## 📄 License & Verification
 
-This project was **100% Vibe-Coded** using Antigravity AI and Google Gemini.
+This project was **100% Vibe-Coded** using Antigravity AI, Google Gemini, and Stitch MCP.
 For the complete prompt trajectory and verification transcript, see **[`PROMPTS.md`](PROMPTS.md)**.
