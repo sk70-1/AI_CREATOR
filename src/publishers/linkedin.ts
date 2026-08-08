@@ -78,8 +78,12 @@ export async function publishToLinkedIn(
     };
   }
 
+  // Format full rich post commentary for LinkedIn
+  const cleanDescription = content.replace(/https?:\/\/\S+/g, '').trim();
+  const formattedContent = `${content}\n\n#AI #TechTrends #Innovation #AURA_AI`;
+
   try {
-    // Call LinkedIn ugcPosts API
+    // Call LinkedIn ugcPosts API with rich commentary and article card description
     const response = await axios.post(
       'https://api.linkedin.com/v2/ugcPosts',
       {
@@ -88,7 +92,7 @@ export async function publishToLinkedIn(
         specificContent: {
           'com.linkedin.ugc.ShareContent': {
             shareCommentary: {
-              text: content,
+              text: formattedContent,
             },
             shareMediaCategory: topicUrl ? 'ARTICLE' : 'NONE',
             media: topicUrl
@@ -96,7 +100,8 @@ export async function publishToLinkedIn(
                   {
                     status: 'READY',
                     originalUrl: topicUrl,
-                    title: { text: topicTitle || 'AI Curator Update' },
+                    title: { text: topicTitle || 'AURA AI Tech Curation' },
+                    description: { text: cleanDescription.slice(0, 250) },
                   },
                 ]
               : [],

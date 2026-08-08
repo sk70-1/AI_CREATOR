@@ -9,7 +9,8 @@ import {
   Image as ImageIcon,
   Copy,
   Check,
-  Globe
+  Globe,
+  Loader2
 } from 'lucide-react';
 
 export interface PostItem {
@@ -41,6 +42,7 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
 }) => {
   const [filter, setFilter] = useState<'all' | 'published' | 'drafts'>('all');
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [publishingId, setPublishingId] = useState<string | null>(null);
 
   const filteredPosts = posts.filter((post) => {
     if (filter === 'published') return post.is_published === 1;
@@ -68,6 +70,38 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  const handleLinkedInShare = async (post: PostItem) => {
+    const content = post.content || post.draft_content || '';
+    const topicUrl = post.topic_url || post.source_url || '';
+    const topicTitle = post.topic_title || post.source_title || '';
+
+    setPublishingId(post.id);
+    try {
+      const res = await fetch('/api/agent/publish/linkedin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content, topicUrl, topicTitle }),
+      });
+      const data = await res.json();
+      if (data.success && !data.result?.isSimulated) {
+        alert('✅ Post with full description published directly to your LinkedIn feed!');
+      } else {
+        // Fallback: Copy rich post description to clipboard and open LinkedIn Share Intent
+        const fullDescription = `${content}\n\nFull story: ${topicUrl}\n#AI #TechTrends #Innovation`;
+        await navigator.clipboard.writeText(fullDescription);
+        setCopiedId(post.id);
+        window.open(getLinkedInShareUrl(topicUrl), '_blank');
+      }
+    } catch {
+      const fullDescription = `${content}\n\nFull story: ${topicUrl}\n#AI #TechTrends #Innovation`;
+      await navigator.clipboard.writeText(fullDescription);
+      setCopiedId(post.id);
+      window.open(getLinkedInShareUrl(topicUrl), '_blank');
+    } finally {
+      setPublishingId(null);
+    }
+  };
+
   return (
     <div className="bg-surface border border-border-subtle rounded-xl p-5 mb-6 shadow-xl shadow-black/30 select-none">
       {/* Header & Filter Tabs */}
@@ -78,7 +112,7 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
             Multi-Platform Content Stream
           </h3>
           <p className="font-body text-xs text-on-surface-variant">
-            Autonomous tech insights formatted for X (Twitter), LinkedIn, and Reddit
+            Autonomous tech insights formatted with full descriptions for X, LinkedIn, and Reddit
           </p>
         </div>
 
@@ -214,7 +248,7 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
                     </div>
                   )}
 
-                  {/* Post Content */}
+                  {/* Post Content & Description */}
                   <div className="bg-surface/80 border border-border-subtle/50 rounded-lg p-3 text-sm font-body text-on-surface whitespace-pre-wrap leading-relaxed select-text">
                     {postText}
                   </div>
@@ -239,17 +273,20 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
                       <span>Post to X</span>
                     </a>
 
-                    {/* Share to LinkedIn */}
-                    <a
-                      href={getLinkedInShareUrl(urlText)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-2.5 py-1.5 bg-[#0A66C2]/20 text-[#0A66C2] border border-[#0A66C2]/40 font-mono font-semibold rounded-lg hover:bg-[#0A66C2]/30 transition-colors flex items-center gap-1.5 text-xs"
-                      title="Post to LinkedIn"
+                    {/* Share / Publish to LinkedIn with full Description */}
+                    <button
+                      onClick={() => handleLinkedInShare(post)}
+                      disabled={publishingId === post.id}
+                      className="px-2.5 py-1.5 bg-[#0A66C2]/20 text-[#0A66C2] border border-[#0A66C2]/40 font-mono font-semibold rounded-lg hover:bg-[#0A66C2]/30 transition-colors flex items-center gap-1.5 text-xs disabled:opacity-50"
+                      title="Publish post with full description to LinkedIn"
                     >
-                      <Share2 className="w-3.5 h-3.5 text-[#0A66C2]" />
-                      <span>LinkedIn</span>
-                    </a>
+                      {publishingId === post.id ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin text-[#0A66C2]" />
+                      ) : (
+                        <Share2 className="w-3.5 h-3.5 text-[#0A66C2]" />
+                      )}
+                      <span>{publishingId === post.id ? 'Publishing...' : 'LinkedIn'}</span>
+                    </button>
 
                     {/* Share to Reddit */}
                     <a
