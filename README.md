@@ -1,21 +1,25 @@
-# 🚀 Autonomous AI Creator — Aura AI Command Center
+# 🚀 Autonomous AI Creator — AURA AI Command Center
 
-> **Autonomous Tech News Curator & X Publisher** powered by **Stitch MCP**, **Google Gemini 2.5 Flash**, **Turso Cloud LibSQL**, **Express**, and **Vercel Serverless Functions**.
+> **Autonomous Tech News Curator & Multi-Platform Publisher** powered by **React**, **TypeScript**, **Tailwind CSS**, **Google Gemini 2.0 Flash**, **LinkedIn API**, **Turso Cloud DB**, and **Vercel Serverless Functions**.
 
 ---
 
-## 🌟 Features
+## 🌟 Key Features
 
-- 📰 **Content Discovery**: Scrapes top tech news from HackerNews API & curated RSS feeds.
-- 🧠 **Gemini 2.5 Quality Gate**: AI topic curation, viral copy drafting, and automated quality scoring (9.6/10).
-- 🎨 **Stitch MCP "Aura AI" Dashboard (5 Views)**:
-  - 📊 **Command Center**: Real-time stats, animated pipeline, and filterable story feed.
-  - 🧠 **Agent Personas**: Live persona editor with quick tone presets (`#Authoritative`, `#Technical`, `#Builder`).
-  - ⚡ **Logic Pipeline**: 4-stage workflow visualizer (Discovery ➔ Deduplication ➔ Gemini Gate ➔ X Publish).
-  - 📟 **Execution Logs**: Live streaming terminal execution console.
-  - ⚙️ **System Settings**: Real-time API key & database status monitor.
-- ☁️ **Turso Cloud DB**: Cloud LibSQL database persistence for serverless Lambdas and local dev.
-- 🐦 **X (Twitter) Auto-Publisher**: Direct API publishing with 1-click Web Intent fallback.
+- 📰 **Autonomous Content Discovery**: Scrapes top tech news from HackerNews API & curated RSS feeds (TechCrunch, Ars Technica, The Verge).
+- 🧠 **Gemini AI Quality Gate**: Automated story selection, persona tone adaptation, viral copy creation, and 9.5/10 quality scoring.
+- 🎨 **Automated AI Topic Cover Art**: Generates high-resolution 3D neon obsidian topic cover graphics for every story.
+- 💼 **Multi-Platform Auto-Publisher**:
+  - **LinkedIn**: Direct API publishing via `ugcPosts` endpoint (with automatic member URN resolution) + 1-click share intent.
+  - **X (Twitter)**: Direct OAuth API v2 posting + 1-click Web Intent.
+  - **Reddit**: 1-click pre-filled link submission.
+- 💻 **Stitch MCP UI (5 Command Views)**:
+  - 📊 **Command Center**: Live metrics, pipeline trigger, and filterable multi-platform content stream.
+  - 🤖 **Agent Personas**: Real-time persona manager & tone customizer.
+  - ⚡ **Logic Pipeline**: 4-stage workflow visualizer (Discovery ➔ Deduplication ➔ Gemini Gate ➔ Multi-Publish).
+  - 📟 **Execution Logs**: Real-time execution console.
+  - ⚙️ **System Settings**: Multi-service API key & database status telemetry.
+- ☁️ **Turso Cloud LibSQL DB**: Stateless HTTP database client for serverless functions and local dev.
 - ⏱️ **Vercel Cron Automation**: Scheduled daily curation pipeline (`0 9 * * *`).
 
 ---
@@ -25,24 +29,26 @@
 ```text
 AI_CREATOR/
 ├── api/
-│   └── index.ts            # Vercel Serverless entrypoint
-├── public/
-│   └── index.html          # Stitch MCP Aura AI Command Center Dashboard
+│   └── index.ts            # Vercel Serverless Function entrypoint
 ├── src/
 │   ├── agent/
-│   │   ├── discovery.ts    # News scraper (HackerNews & RSS)
-│   │   └── pipeline.ts     # Gemini 2.5 Flash curation & quality gate
+│   │   ├── discovery.ts    # HackerNews & RSS scraper with request timeouts
+│   │   └── pipeline.ts     # Gemini 2.0 Flash curation & AI image generator
 │   ├── db/
-│   │   └── database.ts     # Turso Cloud LibSQL Database Client
+│   │   └── database.ts     # Turso Cloud LibSQL HTTP Client
 │   ├── publishers/
-│   │   └── twitter.ts      # X (Twitter) Publisher
+│   │   ├── linkedin.ts     # LinkedIn ugcPosts API & Intent publisher
+│   │   └── twitter.ts      # X (Twitter) API & Intent publisher
+│   ├── frontend/
+│   │   ├── components/     # React dashboard components (Sidebar, Feed, Stats, etc.)
+│   │   ├── App.tsx         # Main application controller
+│   │   └── main.tsx        # React Vite root entry
 │   ├── routes/
-│   │   └── api.ts          # Express API routes
-│   └── app.ts              # Express application initializer
-├── scratch/
-│   └── view_db.ts          # Terminal DB inspector (`npm run db:view`)
-├── vercel.json             # Vercel serverless & cron configuration
-└── package.json            # NPM scripts & dependencies
+│   │   └── api.ts          # Express REST API routes
+│   └── app.ts              # Express API server instance
+├── vercel.json             # Vercel SPA rewrites & cron configuration
+├── vite.config.ts          # Vite build configuration (outputs to dist/)
+└── package.json            # Scripts & dependencies
 ```
 
 ---
@@ -57,12 +63,20 @@ npm install
 ```
 
 ### 2. Environment Setup
-Create a `.env` file:
+Create a `.env` file in the root directory:
 ```env
+# Gemini API Key (https://aistudio.google.com/)
 GEMINI_API_KEY=your_gemini_api_key
+
+# Turso Cloud Database (https://turso.tech/)
 TURSO_DATABASE_URL=libsql://your-database.turso.io
 TURSO_AUTH_TOKEN=your_turso_auth_token
 
+# LinkedIn OAuth Credentials (Optional)
+LINKEDIN_ACCESS_TOKEN=your_linkedin_access_token
+LINKEDIN_AUTHOR_URN=urn:li:person:your_member_id
+
+# X (Twitter) Developer API Keys (Optional)
 TWITTER_API_KEY=your_twitter_api_key
 TWITTER_API_SECRET=your_twitter_api_secret
 TWITTER_ACCESS_TOKEN=your_twitter_access_token
@@ -79,8 +93,6 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser!
 
 ## 🌐 Vercel Deployment
 
-Deploy directly via Vercel CLI:
-```bash
-npx vercel --prod
-```
-Add `GEMINI_API_KEY`, `TURSO_DATABASE_URL`, and `TURSO_AUTH_TOKEN` under Vercel Project Settings.
+1. Connect your repository to **Vercel**.
+2. Set **Framework Preset** to **Vite** and **Output Directory** to **`dist`**.
+3. Add `GEMINI_API_KEY`, `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`, and `LINKEDIN_ACCESS_TOKEN` under **Project Settings ➔ Environment Variables** (for **Production**).
