@@ -78,9 +78,11 @@ export async function publishToLinkedIn(
     };
   }
 
-  // Format full rich post commentary for LinkedIn
+  // Ensure post always has a rich description & 5 targeted hashtags
+  const defaultHashtags = '#ArtificialIntelligence #TechNews #FutureTech #Innovation #AURA_AI';
+  const hasHashtags = content.includes('#');
+  const formattedContent = hasHashtags ? content : `${content}\n\n${defaultHashtags}`;
   const cleanDescription = content.replace(/https?:\/\/\S+/g, '').trim();
-  const formattedContent = `${content}\n\n#AI #TechTrends #Innovation #AURA_AI`;
 
   try {
     // Call LinkedIn ugcPosts API with rich commentary and article card description
