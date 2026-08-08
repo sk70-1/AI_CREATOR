@@ -1,7 +1,7 @@
 {
   "name": "autonomous-ai-creator",
   "version": "1.0.0",
-  "description": "Autonomous AI Creator agent hosted on Vercel with direct X (Twitter) publishing",
+  "description": "Autonomous AI Creator agent hosted on Vercel with direct X (Twitter) and LinkedIn publishing",
   "main": "dist/index.js",
   "scripts": {
     "build:frontend": "vite build",
@@ -10,8 +10,7 @@
     "start": "node dist/src/index.js",
     "dev:backend": "tsx watch src/index.ts",
     "dev:frontend": "vite",
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "db:view": "tsx scratch/view_db.ts"
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
   },
   "dependencies": {
     "@google/genai": "^0.15.0",
