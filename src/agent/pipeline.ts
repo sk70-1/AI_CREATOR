@@ -1,4 +1,3 @@
-import { GoogleGenAI } from '@google/genai';
 import { db } from '../db/database';
 import { discoverTopics, RawTopic } from './discovery';
 import { publishToTwitter } from '../publishers/twitter';
@@ -63,6 +62,8 @@ export async function runAgentPipeline(agentId: string = 'default_agent'): Promi
     };
   }
 
+  // Dynamic ESM import for Vercel CommonJS Lambda compatibility
+  const { GoogleGenAI } = await import('@google/genai');
   const ai = new GoogleGenAI({ apiKey });
 
   // 1. Fetch Agent Persona
