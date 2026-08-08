@@ -9,14 +9,19 @@ export interface RawTopic {
   imageUrl?: string;
 }
 
-const parser = new Parser();
+const parser = new Parser({
+  timeout: 5000,
+  headers: {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AURA-AI/1.0',
+  },
+});
 
 const TECH_IMAGES = [
-  'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop', // Abstract AI Neon
-  'https://images.unsplash.com/photo-1677442136019-21780efad99a?w=800&auto=format&fit=crop', // AI Compute & Neural Nets
-  'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&auto=format&fit=crop', // Matrix Cyber Code
-  'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&auto=format&fit=crop', // Microchip & Silicon
-  'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&auto=format&fit=crop', // Cybersecurity & Future Tech
+  'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1677442136019-21780efad99a?w=800&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&auto=format&fit=crop',
 ];
 
 function getRandomTechImage(index: number): string {
@@ -29,14 +34,20 @@ const RSS_FEEDS = [
   { name: 'The Verge', url: 'https://www.theverge.com/rss/index.xml' },
 ];
 
-export async function fetchHackerNewsTopStories(limit: number = 8): Promise<RawTopic[]> {
+export async function fetchHackerNewsTopStories(limit: number = 6): Promise<RawTopic[]> {
   try {
-    const { data: topIds } = await axios.get<number[]>('https://hacker-news.firebaseio.com/v0/topstories.json');
+    const { data: topIds } = await axios.get<number[]>(
+      'https://hacker-news.firebaseio.com/v0/topstories.json',
+      { timeout: 5000 }
+    );
     const selectedIds = topIds.slice(0, limit);
 
     const storyPromises = selectedIds.map(async (id, idx) => {
       try {
-        const { data: item } = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
+        const { data: item } = await axios.get(
+          `https://hacker-news.firebaseio.com/v0/item/${id}.json`,
+          { timeout: 4000 }
+        );
         if (item && item.title && item.url) {
           return {
             title: item.title,
@@ -53,14 +64,14 @@ export async function fetchHackerNewsTopStories(limit: number = 8): Promise<RawT
     });
 
     const stories = await Promise.all(storyPromises);
-    return (stories.filter(Boolean) as RawTopic[]);
+    return stories.filter(Boolean) as RawTopic[];
   } catch (error) {
     console.error('Error fetching HackerNews stories:', error);
     return [];
   }
 }
 
-export async function fetchRssFeeds(itemsPerFeed: number = 3): Promise<RawTopic[]> {
+export async function fetchRssFeeds(itemsPerFeed: number = 2): Promise<RawTopic[]> {
   const topics: RawTopic[] = [];
 
   for (const feedConfig of RSS_FEEDS) {
@@ -90,7 +101,7 @@ export async function fetchRssFeeds(itemsPerFeed: number = 3): Promise<RawTopic[
 
 export async function discoverTopics(): Promise<RawTopic[]> {
   const [hnTopics, rssTopics] = await Promise.all([
-    fetchHackerNewsTopStories(8),
+    fetchHackerNewsTopStories(6),
     fetchRssFeeds(2),
   ]);
 
