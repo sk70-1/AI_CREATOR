@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Share2, ExternalLink, Sparkles, CheckCircle2, Clock, MessageSquare } from 'lucide-react';
+import { Share2, ExternalLink, Sparkles, CheckCircle2, Clock, MessageSquare, Image as ImageIcon } from 'lucide-react';
 
 export interface PostItem {
   id: string;
@@ -10,6 +10,7 @@ export interface PostItem {
   source_title?: string;
   topic_url?: string;
   source_url?: string;
+  image_url?: string;
   score?: number;
   is_published?: number;
   published_tweet_id?: string;
@@ -49,7 +50,7 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
             Curated Content & Publishing Stream
           </h3>
           <p className="font-body text-xs text-on-surface-variant">
-            Live AI-generated tech insights scored by Gemini 2.5 Quality Gate
+            Live AI-generated tech insights & AI cover graphics scored by Gemini Quality Gate
           </p>
         </div>
 
@@ -101,7 +102,7 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
             No Curated Posts Yet
           </h4>
           <p className="font-body text-xs text-on-surface-variant max-w-md mx-auto mb-4">
-            Run the autonomous discovery pipeline to scrape top stories from HackerNews and RSS feeds, filter candidates, and generate viral copy.
+            Run the autonomous discovery pipeline to scrape top stories, generate AI topic cover art, and draft viral posts.
           </p>
           <button
             onClick={onTriggerPipeline}
@@ -117,6 +118,7 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
             const postText = post.content || post.draft_content || 'AI generated post content...';
             const titleText = post.topic_title || post.source_title || '';
             const urlText = post.topic_url || post.source_url || '';
+            const imageSrc = post.image_url;
 
             return (
               <div
@@ -149,7 +151,7 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
 
                   {/* Source Title Link */}
                   {titleText && (
-                    <h4 className="font-headline font-semibold text-on-surface text-base mb-1.5 leading-snug">
+                    <h4 className="font-headline font-semibold text-on-surface text-base mb-2 leading-snug">
                       {urlText ? (
                         <a
                           href={urlText}
@@ -164,6 +166,24 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
                         titleText
                       )}
                     </h4>
+                  )}
+
+                  {/* Generated Cover Image */}
+                  {imageSrc && (
+                    <div className="relative mb-3 rounded-lg overflow-hidden border border-border-subtle bg-surface-container group/img max-h-64">
+                      <img
+                        src={imageSrc}
+                        alt={titleText || 'Topic AI Cover'}
+                        className="w-full h-48 md:h-56 object-cover transition-transform duration-500 group-hover/img:scale-105"
+                        loading="lazy"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = 'none';
+                        }}
+                      />
+                      <div className="absolute top-2 right-2 px-2 py-0.5 bg-black/60 backdrop-blur-md text-[10px] font-mono text-on-surface-variant rounded border border-white/10 flex items-center gap-1">
+                        <ImageIcon className="w-3 h-3 text-primary" /> AI Topic Cover
+                      </div>
+                    </div>
                   )}
 
                   {/* Post Content */}

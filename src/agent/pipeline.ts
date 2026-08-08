@@ -8,6 +8,7 @@ export interface ExecutionLog {
   status: 'published' | 'skipped' | 'failed';
   topicTitle?: string;
   topicUrl?: string;
+  imageUrl?: string;
   content?: string;
   rationale?: string;
   tweetId?: string;
@@ -141,6 +142,11 @@ Respond ONLY with a JSON object in this format (no markdown formatting, no code 
     console.warn('Gemini topic selection fallback to top discovered story:', error?.message || error);
   }
 
+  // Generate Topic-Relevant AI Banner Image
+  const cleanTopicTitle = selectedTopic.title.replace(/[^\w\s]/gi, '').slice(0, 80);
+  const imagePrompt = `${cleanTopicTitle} tech graphic, 3d render, dark obsidian background, electric violet neon glow, high quality 4k digital art`;
+  const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(imagePrompt)}?width=800&height=450&nologo=true`;
+
   // 5. Draft Tweet & Quality Gate via Gemini (with smart post fallback)
   const promptDraft = `
 You are ${agent.name}, an expert tech commentator on X (Twitter).
@@ -202,8 +208,8 @@ Respond ONLY with a valid JSON object in this format (no markdown formatting, no
   const createdAt = new Date().toISOString();
 
   await db.execute({
-    sql: `INSERT INTO posts (id, agent_id, content, rationale, topic_title, topic_url, tweet_id, tweet_url, status, created_at)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    sql: `INSERT INTO posts (id, agent_id, content, rationale, topic_title, topic_url, image_url, tweet_id, tweet_url, status, created_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     args: [
       postId,
       agentId,
@@ -211,6 +217,7 @@ Respond ONLY with a valid JSON object in this format (no markdown formatting, no
       `${curationRationale} | Quality Gate: ${qualityCritique}`,
       selectedTopic.title,
       selectedTopic.url,
+      imageUrl,
       publishResult.tweetId,
       publishResult.tweetUrl,
       'published',
@@ -227,6 +234,7 @@ Respond ONLY with a valid JSON object in this format (no markdown formatting, no
     status: 'published',
     topicTitle: selectedTopic.title,
     topicUrl: selectedTopic.url,
+    imageUrl,
     content: finalPostContent,
     rationale: curationRationale,
     tweetId: publishResult.tweetId,

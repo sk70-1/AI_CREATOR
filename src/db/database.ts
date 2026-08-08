@@ -62,6 +62,7 @@ export async function initDatabase(): Promise<void> {
       rationale TEXT,
       topic_title TEXT,
       topic_url TEXT,
+      image_url TEXT,
       tweet_id TEXT,
       tweet_url TEXT,
       status TEXT DEFAULT 'published',
@@ -69,6 +70,13 @@ export async function initDatabase(): Promise<void> {
       created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     )
   `);
+
+  // Migration: Try adding image_url column if table existed without it
+  try {
+    await client.execute(`ALTER TABLE posts ADD COLUMN image_url TEXT`);
+  } catch {
+    // Column already exists or error ignored
+  }
 
   await client.execute(`
     CREATE TABLE IF NOT EXISTS topic_history (
@@ -111,4 +119,3 @@ export async function initDatabase(): Promise<void> {
 
   isInitialized = true;
 }
-
