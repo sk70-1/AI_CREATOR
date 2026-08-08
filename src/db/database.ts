@@ -8,8 +8,13 @@ let clientInstance: Client | null = null;
 export function getClient(): Client {
   if (clientInstance) return clientInstance;
 
-  const url = process.env.TURSO_DATABASE_URL || 'file:local.db';
+  const rawUrl = process.env.TURSO_DATABASE_URL || 'file:local.db';
   const authToken = process.env.TURSO_AUTH_TOKEN;
+
+  // Convert libsql:// to https:// for HTTP transport compatibility in serverless Lambdas
+  const url = rawUrl.startsWith('libsql://')
+    ? rawUrl.replace('libsql://', 'https://')
+    : rawUrl;
 
   clientInstance = createClient({
     url,
