@@ -1,81 +1,99 @@
+import { createClient, Client } from '@libsql/client';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Pure JavaScript In-Memory Database — zero native dependencies, works everywhere
-const memoryStore = {
-  agents: [
-    {
-      id: 'default_agent',
-      name: 'Aura Tech & AI Strategist',
-      domain: 'AI, Machine Learning, Web3, & Future Tech Trends',
-      tone: 'Insightful, Authoritative, Sharp, & Thought-Provoking',
-      mode: 'autonomous',
-      created_at: new Date().toISOString(),
-    },
-  ],
-  posts: [] as any[],
-  topic_history: [] as any[],
-};
+let clientInstance: Client | null = null;
 
-function createPureJsDriver() {
-  return {
-    execute: async (input: any) => {
-      const sql = typeof input === 'string' ? input : input.sql;
-      const args = typeof input === 'string' ? [] : input.args || [];
-      const lower = sql.toLowerCase().trim();
+export function getClient(): Client {
+  if (clientInstance) return clientInstance;
 
-      if (lower.startsWith('create table')) return { rows: [] };
+  const url = process.env.TURSO_DATABASE_URL || 'file:local.db';
+  const authToken = process.env.TURSO_AUTH_TOKEN;
 
-      if (lower.includes('from agents where id =')) {
-        const id = args[0] || 'default_agent';
-        return { rows: memoryStore.agents.filter((a) => a.id === id) };
-      }
-      if (lower.includes('select * from agents')) return { rows: memoryStore.agents };
-      if (lower.includes('update agents')) {
-        const [name, domain, tone, mode] = args;
-        if (memoryStore.agents[0]) {
-          memoryStore.agents[0] = { ...memoryStore.agents[0], name, domain, tone, mode };
-        }
-        return { rows: [] };
-      }
-      if (lower.includes('select count(*)')) return { rows: [{ count: memoryStore.posts.length }] };
-      if (lower.includes('select * from posts')) return { rows: [...memoryStore.posts].reverse() };
-      if (lower.includes('insert into posts')) {
-        const [id, agent_id, content, rationale, topic_title, topic_url, tweet_id, tweet_url, status] = args;
-        memoryStore.posts.push({
-          id, agent_id, content, rationale, topic_title, topic_url, tweet_id, tweet_url,
-          status: status || 'published', engagement_score: 0, created_at: new Date().toISOString(),
-        });
-        return { rows: [] };
-      }
-      if (lower.includes('from topic_history where topic_hash =')) {
-        const hash = args[0];
-        return { rows: memoryStore.topic_history.filter((t) => t.topic_hash === hash) };
-      }
-      if (lower.includes('insert into topic_history')) {
-        const [id, agent_id, topic_hash, topic_summary] = args;
-        memoryStore.topic_history.push({ id, agent_id, topic_hash, topic_summary, created_at: new Date().toISOString() });
-        return { rows: [] };
-      }
-      return { rows: [] };
-    },
-  };
-}
+  clientInstance = createClient({
+    url,
+    authToken: authToken || undefined,
+  });
 
-let _client: any = null;
-
-function getClient(): any {
-  if (_client) return _client;
-  _client = createPureJsDriver();
-  console.log('✅ Using pure JS in-memory database');
-  return _client;
+  console.log(`✅ LibSQL database client connected to: ${url}`);
+  return clientInstance;
 }
 
 export const db = {
-  execute: async (args: any) => getClient().execute(args),
+  execute: async (args: any) => {
+    const client = getClient();
+    return await client.execute(args);
+  },
 };
 
+let isInitialized = false;
+
 export async function initDatabase(): Promise<void> {
-  getClient();
+  if (isInitialized) return;
+
+  const client = getClient();
+
+  // Create tables if they do not exist
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS agents (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      domain TEXT NOT NULL,
+      tone TEXT NOT NULL,
+      mode TEXT NOT NULL DEFAULT 'autonomous',
+      created_at TEXT NOT NULL
+    )
+  `);
+
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS posts (
+      id TEXT PRIMARY KEY,
+      agent_id TEXT NOT NULL,
+      content TEXT NOT NULL,
+      rationale TEXT,
+      topic_title TEXT,
+      topic_url TEXT,
+      tweet_id TEXT,
+      tweet_url TEXT,
+      status TEXT DEFAULT 'published',
+      engagement_score INTEGER DEFAULT 0,
+      created_at TEXT NOT NULL
+    )
+  `);
+
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS topic_history (
+      id TEXT PRIMARY KEY,
+      agent_id TEXT NOT NULL,
+      topic_hash TEXT NOT NULL,
+      topic_summary TEXT,
+      created_at TEXT NOT NULL
+    )
+  `);
+
+  // Seed default agent if table is empty
+  const existingAgent = await client.execute({
+    sql: 'SELECT id FROM agents WHERE id = ?',
+    args: ['default_agent'],
+  });
+
+  if (existingAgent.rows.length === 0) {
+    await client.execute({
+      sql: `INSERT INTO agents (id, name, domain, tone, mode, created_at)
+            VALUES (?, ?, ?, ?, ?, ?)`,
+      args: [
+        'default_agent',
+        'Aura Tech & AI Strategist',
+        'AI, Machine Learning, Web3, & Future Tech Trends',
+        'Insightful, Authoritative, Sharp, & Thought-Provoking',
+        'autonomous',
+        new Date().toISOString(),
+      ],
+    });
+    console.log('🌱 Seeded default agent configuration into database.');
+  }
+
+  isInitialized = true;
 }
+
