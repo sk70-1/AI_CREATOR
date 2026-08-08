@@ -78,11 +78,18 @@ export async function publishToLinkedIn(
     };
   }
 
-  // Ensure post always has a rich description & 5 targeted hashtags
-  const defaultHashtags = '#ArtificialIntelligence #TechNews #FutureTech #Innovation #AURA_AI';
-  const hasHashtags = content.includes('#');
-  const formattedContent = hasHashtags ? content : `${content}\n\n${defaultHashtags}`;
-  const cleanDescription = content.replace(/https?:\/\/\S+/g, '').trim();
+  // Auto-expand short content into a rich 3-paragraph LinkedIn post with hashtags
+  let formattedContent = content.trim();
+  const cleanTitle = topicTitle || content.split('\n')[0].replace(/[🔥🚀⚡🤖💡]/g, '').trim();
+  const targetUrl = topicUrl || 'https://github.com/sk70-1/AI_CREATOR';
+
+  if (!content.includes('\n\n') || content.length < 150) {
+    formattedContent = `🚀 ${cleanTitle}\n\n📌 Detailed Overview:\nLatest key update on ${cleanTitle}. Explore full details, technical insights, and architectural developments.\n\n💡 Why It Matters:\nThis milestone impacts software architecture, open-source technology, and modern digital ecosystems.\n\n🔗 Full Story: ${targetUrl}\n\n#ArtificialIntelligence #TechNews #FutureTech #Innovation #AURA_AI`;
+  } else if (!content.includes('#')) {
+    formattedContent = `${content}\n\n#ArtificialIntelligence #TechNews #FutureTech #Innovation #AURA_AI`;
+  }
+
+  const cleanDescription = formattedContent.replace(/https?:\/\/\S+/g, '').trim();
 
   try {
     // Call LinkedIn ugcPosts API with rich commentary and article card description
@@ -102,7 +109,7 @@ export async function publishToLinkedIn(
                   {
                     status: 'READY',
                     originalUrl: topicUrl,
-                    title: { text: topicTitle || 'AURA AI Tech Curation' },
+                    title: { text: cleanTitle || 'AURA AI Tech Curation' },
                     description: { text: cleanDescription.slice(0, 250) },
                   },
                 ]

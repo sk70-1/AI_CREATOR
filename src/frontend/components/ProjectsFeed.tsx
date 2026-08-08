@@ -64,6 +64,23 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
     return `https://www.reddit.com/submit?url=${encodeURIComponent(targetUrl)}&title=${encodeURIComponent(title || 'AURA AI Curator')}`;
   };
 
+  const formatLinkedInPost = (post: PostItem) => {
+    const rawContent = post.content || post.draft_content || '';
+    const topicUrl = post.topic_url || post.source_url || '';
+    const topicTitle = post.topic_title || post.source_title || '';
+    const cleanTitle = topicTitle || rawContent.split('\n')[0].replace(/[🔥🚀⚡🤖💡]/g, '').trim();
+
+    if (!rawContent.includes('\n\n') || rawContent.length < 150) {
+      return `🚀 ${cleanTitle}\n\n📌 Detailed Overview:\nLatest key update on ${cleanTitle}. Explore full details, source insights, and technical breakdown.\n\n💡 Why It Matters:\nThis development impacts software architecture, open-source technology, and modern digital ecosystems.\n\n🔗 Full Story: ${topicUrl || 'https://github.com/sk70-1/AI_CREATOR'}\n\n#ArtificialIntelligence #TechNews #FutureTech #Innovation #AURA_AI`;
+    }
+
+    if (!rawContent.includes('#')) {
+      return `${rawContent}\n\n#ArtificialIntelligence #TechNews #FutureTech #Innovation #AURA_AI`;
+    }
+
+    return rawContent;
+  };
+
   const handleCopyText = (id: string, text: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
@@ -74,27 +91,28 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
     const content = post.content || post.draft_content || '';
     const topicUrl = post.topic_url || post.source_url || '';
     const topicTitle = post.topic_title || post.source_title || '';
+    const richDescription = formatLinkedInPost(post);
 
     setPublishingId(post.id);
     try {
+      // Auto-copy rich description to clipboard for seamless pasting
+      await navigator.clipboard.writeText(richDescription);
+      setCopiedId(post.id);
+
       const res = await fetch('/api/agent/publish/linkedin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content, topicUrl, topicTitle }),
+        body: JSON.stringify({ content: richDescription, topicUrl, topicTitle }),
       });
       const data = await res.json();
       if (data.success && !data.result?.isSimulated) {
-        alert('✅ Post with full description published directly to your LinkedIn feed!');
+        alert('✅ Post with rich description & hashtags published directly to your LinkedIn feed!');
       } else {
-        // Fallback: Copy rich post description to clipboard and open LinkedIn Share Intent
-        const fullDescription = `${content}\n\nFull story: ${topicUrl}\n#AI #TechTrends #Innovation`;
-        await navigator.clipboard.writeText(fullDescription);
-        setCopiedId(post.id);
+        // Fallback: Open LinkedIn Share Intent with description copied to clipboard
         window.open(getLinkedInShareUrl(topicUrl), '_blank');
       }
     } catch {
-      const fullDescription = `${content}\n\nFull story: ${topicUrl}\n#AI #TechTrends #Innovation`;
-      await navigator.clipboard.writeText(fullDescription);
+      await navigator.clipboard.writeText(richDescription);
       setCopiedId(post.id);
       window.open(getLinkedInShareUrl(topicUrl), '_blank');
     } finally {
@@ -177,7 +195,8 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
         /* Feed List */
         <div className="space-y-4">
           {filteredPosts.map((post) => {
-            const postText = post.content || post.draft_content || 'AI generated post content...';
+            const rawPostText = post.content || post.draft_content || 'AI generated post content...';
+            const displayPostText = formatLinkedInPost(post);
             const titleText = post.topic_title || post.source_title || '';
             const urlText = post.topic_url || post.source_url || '';
             const imageSrc = post.image_url;
@@ -250,7 +269,7 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
 
                   {/* Post Content & Description */}
                   <div className="bg-surface/80 border border-border-subtle/50 rounded-lg p-3 text-sm font-body text-on-surface whitespace-pre-wrap leading-relaxed select-text">
-                    {postText}
+                    {displayPostText}
                   </div>
                 </div>
 
@@ -263,7 +282,7 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
                   <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                     {/* Share to X */}
                     <a
-                      href={getTwitterIntentUrl(postText)}
+                      href={getTwitterIntentUrl(rawPostText)}
                       target="_blank"
                       rel="noreferrer"
                       className="px-2.5 py-1.5 bg-primary-container text-on-primary-container font-mono font-semibold rounded-lg hover:opacity-90 transition-opacity flex items-center gap-1.5 text-xs shadow-sm shadow-primary-container/20"
@@ -302,7 +321,7 @@ export const ProjectsFeed: React.FC<ProjectsFeedProps> = ({
 
                     {/* Copy Post Text */}
                     <button
-                      onClick={() => handleCopyText(post.id, postText)}
+                      onClick={() => handleCopyText(post.id, displayPostText)}
                       className="px-2 py-1.5 bg-surface-variant text-on-surface-variant hover:text-on-surface border border-border-subtle rounded-lg font-mono text-xs transition-colors flex items-center gap-1"
                       title="Copy Post Content"
                     >
