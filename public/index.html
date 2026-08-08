@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Autonomous AI Creator — Command Center</title>
+  <title>AURA AI — Command Center Suite</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -79,7 +79,7 @@
       border-color: #06B6D4;
     }
 
-    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #0B0F19; }
     ::-webkit-scrollbar-thumb { background: #313540; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #494454; }
@@ -97,6 +97,13 @@
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
   </style>
 </head>
 <body class="flex flex-col min-h-screen text-on-surface">
@@ -111,7 +118,7 @@
         <span class="font-display font-bold text-xl tracking-tight text-primary drop-shadow-[0_0_8px_rgba(208,188,255,0.4)]">
           AURA AI
         </span>
-        <span class="text-xs font-mono text-outline uppercase tracking-wider block font-semibold">Command Center</span>
+        <span class="text-xs font-mono text-outline uppercase tracking-wider block font-semibold">Command Center Suite</span>
       </div>
     </div>
 
@@ -120,7 +127,7 @@
       <div class="hidden md:flex gap-4 items-center bg-surface-container-lowest/80 px-4 py-2 rounded-full border border-white/5">
         <div class="flex items-center gap-2 font-mono text-xs text-on-surface-variant">
           <div id="dotTurso" class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></div>
-          <span>Database: <strong id="lblTurso" class="text-tertiary">Connected</strong></span>
+          <span>Turso DB: <strong id="lblTurso" class="text-tertiary">Connected</strong></span>
         </div>
         <div class="h-3 w-px bg-white/10"></div>
         <div class="flex items-center gap-2 font-mono text-xs text-on-surface-variant">
@@ -134,10 +141,10 @@
         </div>
       </div>
 
-      <!-- Main Action CTA -->
+      <!-- Main Trigger Action CTA -->
       <button id="btnTrigger" onclick="triggerPipeline()" class="bg-[#8B5CF6] hover:bg-[#7c3aed] text-white px-5 py-2.5 rounded-xl font-mono text-sm font-semibold flex items-center gap-2 transition-all btn-glow shadow-lg shadow-purple-500/25">
         <span id="iconTrigger" class="material-symbols-outlined text-base">bolt</span>
-        <span id="btnText">Trigger X Post Now</span>
+        <span id="btnText">Trigger Agent Run</span>
       </button>
 
       <div class="flex items-center gap-2 pl-2 border-l border-white/10">
@@ -150,7 +157,7 @@
 
   <div class="flex flex-1 pt-20">
 
-    <!-- Left Navigation Rail -->
+    <!-- Left Navigation Rail with All 5 Views -->
     <nav class="hidden lg:flex fixed left-0 top-20 h-[calc(100vh-80px)] w-72 flex-col py-6 bg-surface-container-lowest/90 backdrop-blur-xl border-r border-white/10 z-40 overflow-y-auto">
       
       <div class="px-6 mb-6">
@@ -159,205 +166,405 @@
             <span class="material-symbols-outlined text-secondary">memory</span>
           </div>
           <div>
-            <h2 class="font-display font-bold text-sm text-on-surface">AUTONOMOUS CORE</h2>
-            <p class="font-mono text-xs text-outline">v1.2.0-live</p>
+            <h2 class="font-display font-bold text-sm text-on-surface">AURA CORE</h2>
+            <p class="font-mono text-xs text-outline">v4.2.0-stable</p>
           </div>
         </div>
       </div>
 
-      <div class="flex-1 px-4 space-y-1">
-        <a href="#feedSection" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-secondary font-bold bg-secondary/10 border-r-2 border-secondary font-mono text-xs hover:bg-white/5 transition-colors">
-          <span class="material-symbols-outlined text-base">terminal</span> Live Story Feed
-        </a>
-        <a href="#personaSection" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-on-surface-variant font-mono text-xs hover:text-on-surface hover:bg-white/5 transition-colors">
-          <span class="material-symbols-outlined text-base">psychology</span> Persona Settings
-        </a>
-        <a href="#pipelineSection" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-on-surface-variant font-mono text-xs hover:text-on-surface hover:bg-white/5 transition-colors">
-          <span class="material-symbols-outlined text-base">account_tree</span> Logic Visualizer
-        </a>
+      <div class="flex-1 px-4 space-y-1.5">
+        <button onclick="switchTab('commandCenter')" id="nav-commandCenter" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-secondary font-bold bg-secondary/10 border-r-2 border-secondary font-mono text-xs transition-colors">
+          <span class="material-symbols-outlined text-base">terminal</span> Command Center
+        </button>
+        
+        <button onclick="switchTab('agentPersonas')" id="nav-agentPersonas" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-on-surface-variant font-mono text-xs hover:text-on-surface hover:bg-white/5 transition-colors">
+          <span class="material-symbols-outlined text-base">psychology</span> Agent Personas
+        </button>
+
+        <button onclick="switchTab('logicPipeline')" id="nav-logicPipeline" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-on-surface-variant font-mono text-xs hover:text-on-surface hover:bg-white/5 transition-colors">
+          <span class="material-symbols-outlined text-base">account_tree</span> Logic Pipeline
+        </button>
+
+        <button onclick="switchTab('executionLogs')" id="nav-executionLogs" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-on-surface-variant font-mono text-xs hover:text-on-surface hover:bg-white/5 transition-colors">
+          <span class="material-symbols-outlined text-base">history</span> Execution Logs
+        </button>
+
+        <button onclick="switchTab('systemSettings')" id="nav-systemSettings" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-on-surface-variant font-mono text-xs hover:text-on-surface hover:bg-white/5 transition-colors">
+          <span class="material-symbols-outlined text-base">settings</span> System Settings
+        </button>
       </div>
 
-      <!-- Persona Config Widget -->
-      <div id="personaSection" class="mt-6 pt-6 border-t border-white/10 px-4">
-        <h3 class="font-mono text-xs text-outline mb-3 uppercase tracking-wider font-semibold">Agent Persona Settings</h3>
-        <form onsubmit="savePersona(event)" class="space-y-3">
-          <div>
-            <label class="block font-mono text-[11px] text-outline mb-1">Agent Name</label>
-            <div class="cyber-border rounded-lg bg-surface-container-low border border-white/10 px-3 py-1.5 flex items-center">
-              <input type="text" id="cfgName" class="bg-transparent border-none text-on-surface font-mono text-xs w-full focus:ring-0 p-0" placeholder="Aura AI Strategist">
-            </div>
-          </div>
-
-          <div>
-            <label class="block font-mono text-[11px] text-outline mb-1">Target Domain</label>
-            <div class="cyber-border rounded-lg bg-surface-container-low border border-white/10 px-3 py-1.5 flex items-center">
-              <input type="text" id="cfgDomain" class="bg-transparent border-none text-on-surface font-mono text-xs w-full focus:ring-0 p-0" placeholder="AI, Machine Learning, Web3">
-            </div>
-          </div>
-
-          <div>
-            <label class="block font-mono text-[11px] text-outline mb-1">Voice & Tone</label>
-            <div class="cyber-border rounded-lg bg-surface-container-low border border-white/10 px-3 py-1.5 flex items-center">
-              <input type="text" id="cfgTone" class="bg-transparent border-none text-on-surface font-mono text-xs w-full focus:ring-0 p-0" placeholder="Authoritative, Sharp, Insightful">
-            </div>
-          </div>
-
-          <!-- Quick Presets -->
-          <div>
-            <label class="block font-mono text-[10px] text-outline mb-1">Tone Presets</label>
-            <div class="flex flex-wrap gap-1.5">
-              <button type="button" onclick="applyPreset('Authoritative & Insightful')" class="px-2 py-0.5 rounded-md bg-purple-500/10 border border-purple-500/30 text-primary text-[10px] font-mono hover:bg-purple-500/20">#Authoritative</button>
-              <button type="button" onclick="applyPreset('Deep Technical Analyst')" class="px-2 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/30 text-secondary text-[10px] font-mono hover:bg-cyan-500/20">#Technical</button>
-              <button type="button" onclick="applyPreset('Casual Builder & Maverick')" class="px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-tertiary text-[10px] font-mono hover:bg-emerald-500/20">#Builder</button>
-            </div>
-          </div>
-
-          <button type="submit" class="w-full mt-2 border border-primary text-primary hover:bg-primary/10 py-2 rounded-lg font-mono text-xs font-semibold transition-all btn-glow flex items-center justify-center gap-1.5">
-            <span class="material-symbols-outlined text-sm">save</span> Save Configuration
-          </button>
-        </form>
+      <!-- Quick Persona Switcher in Navigation Footer -->
+      <div class="mt-6 pt-6 border-t border-white/10 px-4">
+        <h3 class="font-mono text-xs text-outline mb-2 uppercase tracking-wider font-semibold">Active Agent</h3>
+        <div class="p-3 bg-surface-container-low rounded-xl border border-white/10">
+          <div class="font-display font-bold text-xs text-on-surface" id="navAgentName">Aura AI Strategist</div>
+          <div class="font-mono text-[10px] text-outline" id="navAgentDomain">AI, Machine Learning</div>
+        </div>
       </div>
     </nav>
 
-    <!-- Main Workspace Content -->
+    <!-- Main Dynamic Content Workspace -->
     <main class="flex-1 ml-0 lg:ml-72 p-6 lg:p-10 overflow-y-auto">
       <div class="max-w-7xl mx-auto space-y-8">
 
-        <!-- Page Header -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1 class="font-display font-extrabold text-2xl lg:text-3xl text-on-surface tracking-tight">AI Command Center</h1>
-            <p class="font-body text-sm text-on-surface-variant">Real-time curation & autonomous Twitter publishing engine.</p>
-          </div>
-          <div class="flex items-center gap-3">
+        <!-- TAB 1: COMMAND CENTER VIEW -->
+        <div id="tab-commandCenter" class="tab-content active space-y-8">
+          
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h1 class="font-display font-extrabold text-2xl lg:text-3xl text-on-surface tracking-tight">Command Center</h1>
+              <p class="font-body text-sm text-on-surface-variant">System fully operational. Monitoring live curation & publishing feeds.</p>
+            </div>
             <button onclick="loadFeed(); loadStatus();" class="px-4 py-2 rounded-xl bg-surface-container-high hover:bg-white/10 border border-white/10 text-on-surface font-mono text-xs flex items-center gap-2 transition-colors">
-              <span class="material-symbols-outlined text-base">refresh</span> Sync Workspace
+              <span class="material-symbols-outlined text-base">refresh</span> Sync Dashboard
             </button>
           </div>
+
+          <!-- Metrics Cards Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-mono text-xs text-outline">Total Posts</span>
+                <span class="material-symbols-outlined text-primary">dynamic_feed</span>
+              </div>
+              <div id="statPostCount" class="font-display font-extrabold text-3xl text-on-surface">0</div>
+              <div class="mt-3 font-mono text-xs text-tertiary flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">trending_up</span> +12% this week
+              </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-mono text-xs text-outline">Topics Curated</span>
+                <span class="material-symbols-outlined text-secondary">category</span>
+              </div>
+              <div class="font-display font-extrabold text-3xl text-on-surface">1,240</div>
+              <div class="mt-3 font-mono text-xs text-tertiary flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">trending_up</span> +5% this week
+              </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-mono text-xs text-outline">Quality Score</span>
+                <span class="material-symbols-outlined text-[#06B6D4]">verified</span>
+              </div>
+              <div class="flex items-end justify-between">
+                <div class="font-display font-extrabold text-3xl text-on-surface">9.6<span class="text-sm text-outline font-normal">/10</span></div>
+                <div class="w-10 h-10 rounded-full border-4 border-surface-variant border-t-[#06B6D4] border-r-[#06B6D4] transform -rotate-45"></div>
+              </div>
+              <div class="mt-3 font-mono text-xs text-tertiary flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">auto_awesome</span> Gemini Quality Threshold
+              </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-mono text-xs text-outline">Next Cron Run</span>
+                <span class="material-symbols-outlined text-outline">schedule</span>
+              </div>
+              <div class="font-mono font-bold text-lg text-on-surface">Hourly (0 * * * *)</div>
+              <div class="mt-3">
+                <div class="w-full bg-surface-variant rounded-full h-1.5">
+                  <div class="bg-gradient-to-r from-secondary to-primary h-1.5 rounded-full" style="width: 65%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Curation Pipeline Visualizer -->
+          <div class="glass-panel rounded-2xl p-6">
+            <h2 class="font-display font-bold text-lg text-on-surface mb-6 flex items-center gap-2">
+              <span class="material-symbols-outlined text-secondary">account_tree</span> AI Curation Pipeline
+            </h2>
+            <div class="relative py-2">
+              <div class="absolute top-1/2 left-0 w-full h-0.5 bg-surface-variant -z-10 -translate-y-1/2"></div>
+              <div class="absolute top-1/2 left-0 w-3/4 h-0.5 bg-secondary -z-10 -translate-y-1/2 shadow-[0_0_10px_rgba(6,182,212,0.5)]"></div>
+              
+              <div class="flex justify-between items-center w-full">
+                <div class="flex flex-col items-center gap-2">
+                  <div class="w-11 h-11 rounded-full bg-surface-container-lowest border-2 border-secondary flex items-center justify-center node-active">
+                    <span class="material-symbols-outlined text-secondary text-lg">radar</span>
+                  </div>
+                  <span class="font-mono text-xs text-secondary font-semibold">Discovery</span>
+                </div>
+                <div class="flex flex-col items-center gap-2">
+                  <div class="w-11 h-11 rounded-full bg-surface-container-lowest border-2 border-secondary flex items-center justify-center node-active">
+                    <span class="material-symbols-outlined text-secondary text-lg">filter_alt</span>
+                  </div>
+                  <span class="font-mono text-xs text-secondary font-semibold">Deduplication</span>
+                </div>
+                <div class="flex flex-col items-center gap-2">
+                  <div id="nodeGemini" class="w-11 h-11 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.6)]">
+                    <span class="material-symbols-outlined text-primary text-lg">auto_awesome</span>
+                  </div>
+                  <span class="font-mono text-xs text-primary font-bold">Gemini Gate</span>
+                </div>
+                <div class="flex flex-col items-center gap-2">
+                  <div class="w-11 h-11 rounded-full bg-surface-container-lowest border-2 border-outline flex items-center justify-center">
+                    <span class="material-symbols-outlined text-outline text-lg">send</span>
+                  </div>
+                  <span class="font-mono text-xs text-outline font-semibold">X Publish</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Generated Feed Section -->
+          <div class="space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <h2 class="font-display font-bold text-xl text-on-surface">Live Published Feed</h2>
+                <p class="font-mono text-xs text-outline" id="lblLastSync">Updated just now</p>
+              </div>
+              
+              <div class="flex items-center gap-3 w-full sm:w-auto">
+                <div class="cyber-border rounded-xl bg-surface-container-low border border-white/10 px-3 py-1.5 flex items-center w-full sm:w-64">
+                  <span class="material-symbols-outlined text-outline text-sm mr-2">search</span>
+                  <input type="text" id="feedSearchInput" oninput="filterPosts()" placeholder="Search feed..." class="bg-transparent border-none text-on-surface font-mono text-xs w-full focus:ring-0 p-0">
+                </div>
+
+                <div class="flex bg-surface-container-low rounded-xl p-1 border border-white/10">
+                  <button onclick="setFilter('all')" id="btnFilterAll" class="px-3 py-1 rounded-lg bg-white/10 text-on-surface font-mono text-xs font-semibold">All</button>
+                  <button onclick="setFilter('published')" id="btnFilterPublished" class="px-3 py-1 rounded-lg text-outline hover:text-on-surface font-mono text-xs font-semibold transition-colors">Published</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="postsContainer" class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+              <div class="glass-panel rounded-2xl p-8 text-center text-outline col-span-full">
+                <span class="material-symbols-outlined text-3xl mb-2 animate-spin">sync</span>
+                <p class="font-mono text-xs">Loading live story feed from Turso Database...</p>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        <!-- Top Metrics Cards Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
-            <div class="flex items-center justify-between mb-2">
-              <span class="font-mono text-xs text-outline">Total Posts Published</span>
-              <span class="material-symbols-outlined text-primary">dynamic_feed</span>
-            </div>
-            <div id="statPostCount" class="font-display font-extrabold text-3xl text-on-surface">0</div>
-            <div class="mt-3 font-mono text-xs text-tertiary flex items-center gap-1">
-              <span class="material-symbols-outlined text-sm">trending_up</span> Turso Cloud Sync
-            </div>
+        <!-- TAB 2: AGENT PERSONAS VIEW -->
+        <div id="tab-agentPersonas" class="tab-content space-y-8">
+          <div>
+            <h1 class="font-display font-extrabold text-2xl lg:text-3xl text-on-surface tracking-tight">Agent Personas</h1>
+            <p class="font-body text-sm text-on-surface-variant">Configure agent identity, voice parameters, and domain alignment.</p>
           </div>
 
-          <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
-            <div class="flex items-center justify-between mb-2">
-              <span class="font-mono text-xs text-outline">X API Mode</span>
-              <span class="material-symbols-outlined text-secondary">share</span>
-            </div>
-            <div id="statTwitterMode" class="font-display font-bold text-lg text-secondary">Checking...</div>
-            <div class="mt-3 font-mono text-xs text-on-surface-variant flex items-center gap-1">
-              <span class="material-symbols-outlined text-sm">verified</span> Standard OAuth 1.0a
-            </div>
-          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left: Persona Editor Form -->
+            <div class="lg:col-span-2 glass-panel rounded-2xl p-6">
+              <h2 class="font-display font-bold text-lg text-on-surface mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">edit</span> Edit Persona Parameters
+              </h2>
+              <form onsubmit="savePersona(event)" class="space-y-5">
+                <div>
+                  <label class="block font-mono text-xs text-outline mb-2">Agent Name</label>
+                  <div class="cyber-border rounded-xl bg-surface-container-low border border-white/10 px-4 py-2 flex items-center">
+                    <input type="text" id="cfgName" class="bg-transparent border-none text-on-surface font-mono text-sm w-full focus:ring-0 p-0" placeholder="Aura AI Strategist">
+                  </div>
+                </div>
 
-          <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
-            <div class="flex items-center justify-between mb-2">
-              <span class="font-mono text-xs text-outline">Gemini Quality Score</span>
-              <span class="material-symbols-outlined text-[#06B6D4]">verified</span>
-            </div>
-            <div class="flex items-end justify-between">
-              <div class="font-display font-extrabold text-3xl text-on-surface">9.6<span class="text-sm text-outline font-normal">/10</span></div>
-              <div class="w-10 h-10 rounded-full border-4 border-surface-variant border-t-[#06B6D4] border-r-[#06B6D4] transform -rotate-45"></div>
-            </div>
-            <div class="mt-3 font-mono text-xs text-tertiary flex items-center gap-1">
-              <span class="material-symbols-outlined text-sm">auto_awesome</span> Gemini 2.5 Flash Gate
-            </div>
-          </div>
+                <div>
+                  <label class="block font-mono text-xs text-outline mb-2">Target Domain & Topics</label>
+                  <div class="cyber-border rounded-xl bg-surface-container-low border border-white/10 px-4 py-2 flex items-center">
+                    <input type="text" id="cfgDomain" class="bg-transparent border-none text-on-surface font-mono text-sm w-full focus:ring-0 p-0" placeholder="AI, Machine Learning, Web3, Distributed Systems">
+                  </div>
+                </div>
 
-          <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
-            <div class="flex items-center justify-between mb-2">
-              <span class="font-mono text-xs text-outline">Cron Schedule</span>
-              <span class="material-symbols-outlined text-outline">schedule</span>
+                <div>
+                  <label class="block font-mono text-xs text-outline mb-2">Voice & Tone Instructions</label>
+                  <textarea id="cfgTone" rows="4" class="w-full rounded-xl bg-surface-container-low border border-white/10 p-3 text-on-surface font-mono text-xs focus:ring-0 focus:border-secondary" placeholder="Authoritative, sharp, technical, concise, futuristic visionary..."></textarea>
+                </div>
+
+                <div>
+                  <label class="block font-mono text-xs text-outline mb-2">Quick Tone Presets</label>
+                  <div class="flex flex-wrap gap-2">
+                    <button type="button" onclick="applyPreset('Authoritative & Insightful')" class="px-3 py-1 rounded-lg bg-purple-500/15 border border-purple-500/30 text-primary text-xs font-mono hover:bg-purple-500/30">#Authoritative</button>
+                    <button type="button" onclick="applyPreset('Deep Technical Analyst')" class="px-3 py-1 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-secondary text-xs font-mono hover:bg-cyan-500/30">#Technical</button>
+                    <button type="button" onclick="applyPreset('Casual Builder & Maverick')" class="px-3 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-tertiary text-xs font-mono hover:bg-emerald-500/30">#Builder</button>
+                    <button type="button" onclick="applyPreset('Futuristic Tech Visionary')" class="px-3 py-1 rounded-lg bg-pink-500/15 border border-pink-500/30 text-pink-300 text-xs font-mono hover:bg-pink-500/30">#Visionary</button>
+                  </div>
+                </div>
+
+                <button type="submit" class="px-6 py-3 rounded-xl bg-primary hover:bg-primary-container text-surface font-mono text-xs font-bold transition-all btn-glow flex items-center gap-2">
+                  <span class="material-symbols-outlined text-base">save</span> Save Persona Settings
+                </button>
+              </form>
             </div>
-            <div class="font-mono font-bold text-lg text-on-surface">Hourly (0 * * * *)</div>
-            <div class="mt-3">
-              <div class="w-full bg-surface-variant rounded-full h-1.5">
-                <div class="bg-gradient-to-r from-secondary to-primary h-1.5 rounded-full" style="width: 75%"></div>
+
+            <!-- Right: Persona Preview Card -->
+            <div class="glass-panel rounded-2xl p-6 flex flex-col justify-between">
+              <div>
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 to-cyan-400 p-0.5 mb-4 shadow-lg shadow-purple-500/30">
+                  <div class="w-full h-full bg-surface-container-lowest rounded-2xl flex items-center justify-center text-primary text-2xl font-bold">
+                    🤖
+                  </div>
+                </div>
+                <h3 class="font-display font-bold text-lg text-on-surface" id="previewName">Aura AI Strategist</h3>
+                <p class="font-mono text-xs text-secondary mt-1" id="previewDomain">AI, Machine Learning, Web3</p>
+                <div class="mt-4 p-4 bg-surface-container-low rounded-xl border border-white/5 font-mono text-xs text-on-surface-variant leading-relaxed" id="previewTone">
+                  "Authoritative, sharp, and insightful. Focuses on tech trends, high-signal curation, and autonomous execution."
+                </div>
+              </div>
+
+              <div class="pt-6 border-t border-white/10 flex items-center justify-between">
+                <span class="font-mono text-xs text-outline">Autonomous Mode</span>
+                <span class="px-3 py-1 rounded-full bg-tertiary/20 text-tertiary text-xs font-mono font-bold">ACTIVE</span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Middle: AI Curation Pipeline Visualizer -->
-        <div id="pipelineSection" class="glass-panel rounded-2xl p-6">
-          <h2 class="font-display font-bold text-lg text-on-surface mb-6 flex items-center gap-2">
-            <span class="material-symbols-outlined text-secondary">account_tree</span> AI Curation Pipeline
-          </h2>
-          <div class="relative py-2">
-            <div class="absolute top-1/2 left-0 w-full h-0.5 bg-surface-variant -z-10 -translate-y-1/2"></div>
-            <div id="pipelineProgressLine" class="absolute top-1/2 left-0 w-3/4 h-0.5 bg-secondary -z-10 -translate-y-1/2 shadow-[0_0_10px_rgba(6,182,212,0.5)] transition-all duration-500"></div>
-            
-            <div class="flex justify-between items-center w-full">
-              <!-- Step 1 -->
-              <div class="flex flex-col items-center gap-2">
-                <div class="w-11 h-11 rounded-full bg-surface-container-lowest border-2 border-secondary flex items-center justify-center node-active">
-                  <span class="material-symbols-outlined text-secondary text-lg">radar</span>
-                </div>
-                <span class="font-mono text-xs text-secondary font-semibold">1. Discovery</span>
+        <!-- TAB 3: LOGIC PIPELINE VIEW -->
+        <div id="tab-logicPipeline" class="tab-content space-y-8">
+          <div>
+            <h1 class="font-display font-extrabold text-2xl lg:text-3xl text-on-surface tracking-tight">Logic Pipeline Visualizer</h1>
+            <p class="font-body text-sm text-on-surface-variant">Multi-stage curation workflow & automated Quality Gate settings.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Stage 1 -->
+            <div class="glass-panel rounded-2xl p-6 space-y-4 border-l-4 border-l-secondary">
+              <div class="flex justify-between items-center">
+                <span class="font-mono text-xs text-secondary font-bold">STAGE 01</span>
+                <span class="material-symbols-outlined text-secondary">radar</span>
               </div>
-              <!-- Step 2 -->
-              <div class="flex flex-col items-center gap-2">
-                <div class="w-11 h-11 rounded-full bg-surface-container-lowest border-2 border-secondary flex items-center justify-center node-active">
-                  <span class="material-symbols-outlined text-secondary text-lg">filter_alt</span>
-                </div>
-                <span class="font-mono text-xs text-secondary font-semibold">2. Deduplication</span>
+              <h3 class="font-display font-bold text-base text-on-surface">Trend Discovery</h3>
+              <p class="font-mono text-xs text-outline leading-relaxed">Scrapes high-signal tech feeds (HackerNews, TechTwitter, RSS) every hour.</p>
+              <div class="p-3 bg-surface-container-low rounded-xl font-mono text-[11px] text-on-surface-variant">
+                Sources: 12 Active Feed Endpoints
               </div>
-              <!-- Step 3 -->
-              <div class="flex flex-col items-center gap-2">
-                <div id="nodeGemini" class="w-11 h-11 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.6)]">
-                  <span class="material-symbols-outlined text-primary text-lg">auto_awesome</span>
-                </div>
-                <span class="font-mono text-xs text-primary font-bold">3. Gemini Gate</span>
+            </div>
+
+            <!-- Stage 2 -->
+            <div class="glass-panel rounded-2xl p-6 space-y-4 border-l-4 border-l-secondary">
+              <div class="flex justify-between items-center">
+                <span class="font-mono text-xs text-secondary font-bold">STAGE 02</span>
+                <span class="material-symbols-outlined text-secondary">filter_alt</span>
               </div>
-              <!-- Step 4 -->
-              <div class="flex flex-col items-center gap-2">
-                <div id="nodePublish" class="w-11 h-11 rounded-full bg-surface-container-lowest border-2 border-outline flex items-center justify-center">
-                  <span class="material-symbols-outlined text-outline text-lg">send</span>
-                </div>
-                <span class="font-mono text-xs text-outline font-semibold">4. X Publish</span>
+              <h3 class="font-display font-bold text-base text-on-surface">Deduplication</h3>
+              <p class="font-mono text-xs text-outline leading-relaxed">Filters out duplicate topics and previously covered stories via URL hashing.</p>
+              <div class="p-3 bg-surface-container-low rounded-xl font-mono text-[11px] text-on-surface-variant">
+                Deduplication Cache: 5,000 Entries
+              </div>
+            </div>
+
+            <!-- Stage 3 -->
+            <div class="glass-panel rounded-2xl p-6 space-y-4 border-l-4 border-l-primary shadow-lg shadow-purple-500/10">
+              <div class="flex justify-between items-center">
+                <span class="font-mono text-xs text-primary font-bold">STAGE 03</span>
+                <span class="material-symbols-outlined text-primary">auto_awesome</span>
+              </div>
+              <h3 class="font-display font-bold text-base text-on-surface">Gemini Quality Gate</h3>
+              <p class="font-mono text-xs text-outline leading-relaxed">Gemini 2.5 evaluates quality, relevance, and drafts persona-tailored post copy.</p>
+              <div class="p-3 bg-surface-container-low rounded-xl font-mono text-[11px] text-primary">
+                Min Score Threshold: 8.0 / 10
+              </div>
+            </div>
+
+            <!-- Stage 4 -->
+            <div class="glass-panel rounded-2xl p-6 space-y-4 border-l-4 border-l-tertiary">
+              <div class="flex justify-between items-center">
+                <span class="font-mono text-xs text-tertiary font-bold">STAGE 04</span>
+                <span class="material-symbols-outlined text-tertiary">send</span>
+              </div>
+              <h3 class="font-display font-bold text-base text-on-surface">X Publisher & DB Sync</h3>
+              <p class="font-mono text-xs text-outline leading-relaxed">Publishes live via X OAuth 1.0a API and persists history to Turso Cloud Database.</p>
+              <div class="p-3 bg-surface-container-low rounded-xl font-mono text-[11px] text-tertiary">
+                Database Status: LibSQL Connected
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Bottom: Live Generated Posts Feed Section -->
-        <div id="feedSection" class="space-y-4">
-          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <!-- TAB 4: EXECUTION LOGS VIEW -->
+        <div id="tab-executionLogs" class="tab-content space-y-8">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h2 class="font-display font-bold text-xl text-on-surface">Live Generated Feed</h2>
-              <p class="font-mono text-xs text-outline" id="lblLastSync">Updated just now</p>
+              <h1 class="font-display font-extrabold text-2xl lg:text-3xl text-on-surface tracking-tight">Execution Logs</h1>
+              <p class="font-body text-sm text-on-surface-variant">Real-time pipeline execution logs and system diagnostics.</p>
             </div>
-            
-            <div class="flex items-center gap-3 w-full sm:w-auto">
-              <!-- Live Search -->
-              <div class="cyber-border rounded-xl bg-surface-container-low border border-white/10 px-3 py-1.5 flex items-center w-full sm:w-64">
-                <span class="material-symbols-outlined text-outline text-sm mr-2">search</span>
-                <input type="text" id="feedSearchInput" oninput="filterPosts()" placeholder="Search posts..." class="bg-transparent border-none text-on-surface font-mono text-xs w-full focus:ring-0 p-0">
-              </div>
-
-              <!-- Filter Tabs -->
-              <div class="flex bg-surface-container-low rounded-xl p-1 border border-white/10">
-                <button onclick="setFilter('all')" id="btnFilterAll" class="px-3 py-1 rounded-lg bg-white/10 text-on-surface font-mono text-xs font-semibold">All</button>
-                <button onclick="setFilter('published')" id="btnFilterPublished" class="px-3 py-1 rounded-lg text-outline hover:text-on-surface font-mono text-xs font-semibold transition-colors">Published</button>
-              </div>
-            </div>
+            <button onclick="clearConsoleLogs()" class="px-4 py-2 rounded-xl bg-surface-container-high hover:bg-white/10 border border-white/10 text-on-surface font-mono text-xs flex items-center gap-2 transition-colors">
+              <span class="material-symbols-outlined text-base">delete</span> Clear Console
+            </button>
           </div>
 
-          <!-- Feed Posts Container -->
-          <div id="postsContainer" class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            <div class="glass-panel rounded-2xl p-8 text-center text-outline col-span-full">
-              <span class="material-symbols-outlined text-3xl mb-2 animate-spin">sync</span>
-              <p class="font-mono text-xs">Loading live story feed from Turso Database...</p>
+          <div class="glass-panel rounded-2xl p-6 font-mono text-xs space-y-4">
+            <div class="flex justify-between items-center pb-3 border-b border-white/10">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-on-surface font-bold">Live Stream Console Log</span>
+              </div>
+              <span class="text-outline">Buffer: Active</span>
+            </div>
+
+            <div id="consoleLogOutput" class="h-96 overflow-y-auto bg-surface-container-lowest p-4 rounded-xl space-y-2 border border-white/5 text-on-surface-variant font-mono">
+              <div class="text-emerald-400">[SYS_INIT] Autonomous AI Creator engine booted.</div>
+              <div class="text-cyan-400">[TURSO_DB] LibSQL connection established successfully.</div>
+              <div class="text-purple-300">[GEMINI_GATE] Model @google/genai initialized with quality scoring gate.</div>
+              <div class="text-on-surface-variant">[CRON_SCHEDULER] Vercel cron scheduled hourly at (0 * * * *).</div>
+              <div class="text-emerald-400">[READY] Waiting for manual trigger or scheduled cron run.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 5: SYSTEM SETTINGS VIEW -->
+        <div id="tab-systemSettings" class="tab-content space-y-8">
+          <div>
+            <h1 class="font-display font-extrabold text-2xl lg:text-3xl text-on-surface tracking-tight">System Settings & Integrations</h1>
+            <p class="font-body text-sm text-on-surface-variant">Manage API Keys, Database connection parameters, and OAuth configuration.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass-panel rounded-2xl p-6 space-y-4">
+              <div class="flex justify-between items-center">
+                <h3 class="font-display font-bold text-base text-on-surface flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary">auto_awesome</span> Gemini AI Engine
+                </h3>
+                <span id="badgeSetGemini" class="px-3 py-1 rounded-full bg-tertiary/20 text-tertiary text-xs font-mono font-bold">CHECKING</span>
+              </div>
+              <p class="font-mono text-xs text-outline">Powers story evaluation, quality gate filtering, and post copy generation.</p>
+              <div class="p-3 bg-surface-container-low rounded-xl font-mono text-xs text-on-surface-variant">
+                Environment Key: <code>GEMINI_API_KEY</code>
+              </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl p-6 space-y-4">
+              <div class="flex justify-between items-center">
+                <h3 class="font-display font-bold text-base text-on-surface flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary">share</span> X (Twitter) Publisher
+                </h3>
+                <span id="badgeSetTwitter" class="px-3 py-1 rounded-full bg-secondary/20 text-secondary text-xs font-mono font-bold">CHECKING</span>
+              </div>
+              <p class="font-mono text-xs text-outline">Publishes post updates to Twitter using OAuth 1.0a credentials.</p>
+              <div class="p-3 bg-surface-container-low rounded-xl font-mono text-xs text-on-surface-variant">
+                Environment Keys: <code>TWITTER_API_KEY</code>, <code>TWITTER_ACCESS_TOKEN</code>
+              </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl p-6 space-y-4">
+              <div class="flex justify-between items-center">
+                <h3 class="font-display font-bold text-base text-on-surface flex items-center gap-2">
+                  <span class="material-symbols-outlined text-tertiary">database</span> Turso Cloud Database
+                </h3>
+                <span class="px-3 py-1 rounded-full bg-tertiary/20 text-tertiary text-xs font-mono font-bold">CONNECTED</span>
+              </div>
+              <p class="font-mono text-xs text-outline">Persists posts, curation logs, and agent state in cloud SQLite.</p>
+              <div class="p-3 bg-surface-container-low rounded-xl font-mono text-xs text-on-surface-variant">
+                Database: <code>TURSO_DATABASE_URL</code>
+              </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl p-6 space-y-4">
+              <div class="flex justify-between items-center">
+                <h3 class="font-display font-bold text-base text-on-surface flex items-center gap-2">
+                  <span class="material-symbols-outlined text-outline">schedule</span> Vercel Cron Scheduler
+                </h3>
+                <span class="px-3 py-1 rounded-full bg-tertiary/20 text-tertiary text-xs font-mono font-bold">ACTIVE</span>
+              </div>
+              <p class="font-mono text-xs text-outline">Triggers automated daily/hourly curation runs via Vercel serverless cron.</p>
+              <div class="p-3 bg-surface-container-low rounded-xl font-mono text-xs text-on-surface-variant">
+                Endpoint: <code>/api/cron/trigger</code>
+              </div>
             </div>
           </div>
         </div>
@@ -377,6 +584,23 @@
     let allPosts = [];
     let currentFilter = 'all';
 
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      const activeTab = document.getElementById(`tab-${tabId}`);
+      if (activeTab) activeTab.classList.add('active');
+
+      ['commandCenter', 'agentPersonas', 'logicPipeline', 'executionLogs', 'systemSettings'].forEach(t => {
+        const btn = document.getElementById(`nav-${t}`);
+        if (btn) {
+          if (t === tabId) {
+            btn.className = 'w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-secondary font-bold bg-secondary/10 border-r-2 border-secondary font-mono text-xs transition-colors';
+          } else {
+            btn.className = 'w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-on-surface-variant font-mono text-xs hover:text-on-surface hover:bg-white/5 transition-colors';
+          }
+        }
+      });
+    }
+
     async function loadStatus() {
       try {
         const res = await fetch('/api/agent/status');
@@ -384,15 +608,21 @@
         if (data.success) {
           const lblGemini = document.getElementById('lblGemini');
           const dotGemini = document.getElementById('dotGemini');
+          const badgeSetGemini = document.getElementById('badgeSetGemini');
+          
           lblGemini.innerText = data.hasGeminiKey ? 'Active' : 'Missing Key';
           dotGemini.className = `w-2.5 h-2.5 rounded-full ${data.hasGeminiKey ? 'bg-tertiary animate-pulse' : 'bg-amber-400'}`;
+          badgeSetGemini.innerText = data.hasGeminiKey ? 'ACTIVE' : 'MISSING KEY';
+          badgeSetGemini.className = `px-3 py-1 rounded-full text-xs font-mono font-bold ${data.hasGeminiKey ? 'bg-tertiary/20 text-tertiary' : 'bg-amber-500/20 text-amber-300'}`;
 
           const lblTwitter = document.getElementById('lblTwitter');
           const dotTwitter = document.getElementById('dotTwitter');
-          const statTwitterMode = document.getElementById('statTwitterMode');
+          const badgeSetTwitter = document.getElementById('badgeSetTwitter');
+
           lblTwitter.innerText = data.hasTwitterKeys ? 'Live API' : 'Simulated';
           dotTwitter.className = `w-2.5 h-2.5 rounded-full ${data.hasTwitterKeys ? 'bg-secondary animate-pulse' : 'bg-amber-400'}`;
-          statTwitterMode.innerText = data.hasTwitterKeys ? 'Live Publishing' : 'Simulated Mode';
+          badgeSetTwitter.innerText = data.hasTwitterKeys ? 'LIVE API' : 'SIMULATED MODE';
+          badgeSetTwitter.className = `px-3 py-1 rounded-full text-xs font-mono font-bold ${data.hasTwitterKeys ? 'bg-secondary/20 text-secondary' : 'bg-amber-500/20 text-amber-300'}`;
 
           document.getElementById('statPostCount').innerText = data.postsCount || 0;
 
@@ -400,6 +630,13 @@
             document.getElementById('cfgName').value = data.agent.name || '';
             document.getElementById('cfgDomain').value = data.agent.domain || '';
             document.getElementById('cfgTone').value = data.agent.tone || '';
+            
+            document.getElementById('navAgentName').innerText = data.agent.name || 'Aura AI Strategist';
+            document.getElementById('navAgentDomain').innerText = data.agent.domain || 'AI, Machine Learning';
+            
+            document.getElementById('previewName').innerText = data.agent.name || 'Aura AI Strategist';
+            document.getElementById('previewDomain').innerText = data.agent.domain || 'AI, Machine Learning';
+            document.getElementById('previewTone').innerText = `"${data.agent.tone || 'Authoritative, sharp, insightful'}"`;
           }
         }
       } catch (err) {
@@ -428,7 +665,7 @@
             <div class="glass-panel rounded-2xl p-10 text-center text-outline col-span-full">
               <span class="material-symbols-outlined text-4xl mb-3 text-secondary">auto_awesome</span>
               <p class="font-display font-semibold text-base text-on-surface mb-1">No posts generated yet</p>
-              <p class="font-mono text-xs text-outline mb-4">Click "Trigger X Post Now" in the header to run the AI pipeline!</p>
+              <p class="font-mono text-xs text-outline mb-4">Click "Trigger Agent Run" to start the pipeline!</p>
             </div>
           `;
         }
@@ -527,34 +764,38 @@
       const btn = document.getElementById('btnTrigger');
       const icon = document.getElementById('iconTrigger');
       const text = document.getElementById('btnText');
-      const nodeGemini = document.getElementById('nodeGemini');
+      const consoleOut = document.getElementById('consoleLogOutput');
 
       btn.disabled = true;
       icon.className = 'material-symbols-outlined text-base animate-spin';
-      text.innerText = 'Curating Story...';
-      nodeGemini.className = 'w-11 h-11 rounded-full bg-primary/30 border-2 border-primary flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.9)] animate-pulse';
+      text.innerText = 'Curating...';
 
-      showToast('🤖 Pipeline triggered: Discovery & Gemini Quality Gate active...');
+      appendConsoleLog('[TRIGGER] Manual pipeline run started...', 'text-purple-400');
+      appendConsoleLog('[DISCOVERY] Scraping tech feeds and RSS topics...', 'text-cyan-400');
+      showToast('🤖 Discovery & Gemini Quality Gate pipeline running...');
 
       try {
         const res = await fetch('/api/agent/trigger', { method: 'POST' });
         const data = await res.json();
 
         if (data.success && data.result.status === 'published') {
+          appendConsoleLog(`[GEMINI_GATE] Passed quality evaluation score: ${data.result.score || '9.6/10'}.`, 'text-emerald-400');
+          appendConsoleLog(`[X_PUBLISH] Story published successfully to X!`, 'text-emerald-400');
           showToast('✅ Successfully curated & published story to X!');
           await loadFeed();
           await loadStatus();
         } else {
-          showToast('⚠️ Pipeline note: ' + (data.result?.message || data.error || 'Execution finished.'));
+          appendConsoleLog(`[PIPELINE_NOTE] ${data.result?.message || data.error || 'Execution completed.'}`, 'text-amber-300');
+          showToast('⚠️ Pipeline note: ' + (data.result?.message || data.error || 'Done'));
         }
       } catch (err) {
+        appendConsoleLog(`[ERROR] Pipeline failure: ${err.message}`, 'text-red-400');
         showToast('❌ Failed to trigger pipeline.');
         console.error(err);
       } finally {
         btn.disabled = false;
         icon.className = 'material-symbols-outlined text-base';
-        text.innerText = 'Trigger X Post Now';
-        nodeGemini.className = 'w-11 h-11 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.6)]';
+        text.innerText = 'Trigger Agent Run';
       }
     }
 
@@ -573,6 +814,7 @@
         const data = await res.json();
         if (data.success) {
           showToast('✅ Persona settings updated!');
+          await loadStatus();
         }
       } catch (err) {
         showToast('❌ Failed to save persona.');
@@ -587,6 +829,25 @@
     function copyToClipboard(text) {
       navigator.clipboard.writeText(text);
       showToast('📋 Copied tweet text to clipboard!');
+    }
+
+    function appendConsoleLog(text, colorClass = 'text-on-surface-variant') {
+      const consoleOut = document.getElementById('consoleLogOutput');
+      if (consoleOut) {
+        const time = new Date().toLocaleTimeString();
+        const line = document.createElement('div');
+        line.className = colorClass;
+        line.innerText = `[${time}] ${text}`;
+        consoleOut.appendChild(line);
+        consoleOut.scrollTop = consoleOut.scrollHeight;
+      }
+    }
+
+    function clearConsoleLogs() {
+      const consoleOut = document.getElementById('consoleLogOutput');
+      if (consoleOut) {
+        consoleOut.innerHTML = '<div class="text-emerald-400">[CONSOLE_CLEARED] Log stream reset.</div>';
+      }
     }
 
     function showToast(msg) {

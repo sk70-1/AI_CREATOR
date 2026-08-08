@@ -26,11 +26,11 @@ app.use(async (req, res, next) => {
 app.use('/api', apiRouter);
 
 // Serve static frontend dashboard
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(process.cwd(), 'public')));
 
 // Fallback: serve index.html for root
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
 });
 
 // Global error handler — prevents unhandled errors from crashing the Lambda
