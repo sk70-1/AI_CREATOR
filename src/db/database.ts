@@ -42,7 +42,7 @@ export async function initDatabase(): Promise<void> {
       domain TEXT NOT NULL,
       tone TEXT NOT NULL,
       mode TEXT NOT NULL DEFAULT 'autonomous',
-      created_at TEXT NOT NULL
+      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     )
   `);
 
@@ -58,7 +58,7 @@ export async function initDatabase(): Promise<void> {
       tweet_url TEXT,
       status TEXT DEFAULT 'published',
       engagement_score INTEGER DEFAULT 0,
-      created_at TEXT NOT NULL
+      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     )
   `);
 
@@ -68,7 +68,7 @@ export async function initDatabase(): Promise<void> {
       agent_id TEXT NOT NULL,
       topic_hash TEXT NOT NULL,
       topic_summary TEXT,
-      created_at TEXT NOT NULL
+      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     )
   `);
 

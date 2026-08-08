@@ -186,10 +186,11 @@ Respond ONLY with a valid JSON object in this format (no markdown formatting, no
   // 7. Save to Database
   const postId = `post_${Date.now()}`;
   const topicHash = crypto.createHash('md5').update(selectedTopic.title.toLowerCase().trim()).digest('hex');
+  const createdAt = new Date().toISOString();
 
   await db.execute({
-    sql: `INSERT INTO posts (id, agent_id, content, rationale, topic_title, topic_url, tweet_id, tweet_url, status)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    sql: `INSERT INTO posts (id, agent_id, content, rationale, topic_title, topic_url, tweet_id, tweet_url, status, created_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     args: [
       postId,
       agentId,
@@ -200,12 +201,13 @@ Respond ONLY with a valid JSON object in this format (no markdown formatting, no
       publishResult.tweetId,
       publishResult.tweetUrl,
       'published',
+      createdAt,
     ],
   });
 
   await db.execute({
-    sql: `INSERT INTO topic_history (id, agent_id, topic_hash, topic_summary) VALUES (?, ?, ?, ?)`,
-    args: [`th_${Date.now()}`, agentId, topicHash, selectedTopic.title],
+    sql: `INSERT INTO topic_history (id, agent_id, topic_hash, topic_summary, created_at) VALUES (?, ?, ?, ?, ?)`,
+    args: [`th_${Date.now()}`, agentId, topicHash, selectedTopic.title, createdAt],
   });
 
   return {
