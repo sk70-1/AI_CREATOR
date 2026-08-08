@@ -112,7 +112,7 @@ export async function runAgentPipeline(agentId: string = 'default_agent'): Promi
     };
   }
 
-  // 4. Topic Selection & Curation via Gemini (with intelligent fallback)
+  // 4. Topic Selection & Curation via Gemini
   const promptCuration = `
 You are ${agent.name}, an elite AI content creator focused on ${agent.domain}.
 Your tone is ${agent.tone}.
@@ -120,7 +120,7 @@ Your tone is ${agent.tone}.
 Here is a list of top candidate tech topics:
 ${validTopics.map((t, idx) => `${idx + 1}. [${t.source}] ${t.title} (${t.url})`).join('\n')}
 
-Select the SINGLE BEST topic that will drive maximum engagement, discussion, and insight on Twitter/X.
+Select the SINGLE BEST topic that will drive maximum engagement, discussion, and insight on LinkedIn and X.
 Respond ONLY with a JSON object in this format (no markdown formatting, no code blocks):
 {
   "selectedIndex": 0,
@@ -148,9 +148,9 @@ Respond ONLY with a JSON object in this format (no markdown formatting, no code 
   const imagePrompt = `${cleanTopicTitle} tech graphic, 3d render, dark obsidian background, electric violet neon glow, high quality 4k digital art`;
   const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(imagePrompt)}?width=800&height=450&nologo=true`;
 
-  // 5. Draft Tweet & Quality Gate via Gemini (with smart post fallback)
+  // 5. Draft Rich Post Description & Hashtags via Gemini
   const promptDraft = `
-You are ${agent.name}, an expert tech commentator on X (Twitter).
+You are ${agent.name}, an expert tech commentator & content creator.
 Domain: ${agent.domain}
 Tone: ${agent.tone}
 
@@ -158,18 +158,18 @@ Topic: ${selectedTopic.title}
 Source URL: ${selectedTopic.url}
 Context: ${selectedTopic.summary}
 
-Task: Write a high-impact, viral-ready X post or thread about this story.
+Task: Write a high-impact, comprehensive social media post with a rich description, key takeaways, and hashtags suitable for LinkedIn & X (Twitter).
+
 Rules:
-- EMOJIS & FORMATTING: Use 2-4 vibrant, expressive emojis (e.g., 🚀, ⚡, 🤖, 💡, 🔥, 📊, 🧵, 👇) to make the hook visually exciting and fun to read!
-- Make it intriguing, punchy, and ultra-concise.
-- STRICT CHARACTER LIMIT: The entire single post MUST BE STRICTLY UNDER 240 CHARACTERS.
-- Include a short key takeaway or takeaway + link.
-- Do NOT use generic clickbait hashtags. Use maximum 1 hashtag.
+1. HOOK & EMOJIS: Start with a catchy headline hook and 2-3 vibrant emojis (e.g. 🚀, ⚡, 🤖, 💡, 🔥).
+2. DETAILED DESCRIPTION: Provide a clear 2-3 sentence overview explaining what happened and why it matters to developers, engineers, and tech leaders.
+3. KEY TAKEAWAYS: Include 2 bulleted key takeaways.
+4. HASHTAGS: ALWAYS end with 3 to 5 relevant, highly targeted hashtags (e.g. #ArtificialIntelligence #TechNews #FutureTech #Innovation #MachineLearning).
 
 Respond ONLY with a valid JSON object in this format (no markdown formatting, no code blocks):
 {
-  "postContent": "Your tweet text here...",
-  "qualityScore": 9,
+  "postContent": "Your full rich post content with detailed description, key takeaways, link, and 3-5 hashtags here...",
+  "qualityScore": 9.5,
   "critique": "Self critique details..."
 }
 `;
@@ -189,14 +189,11 @@ Respond ONLY with a valid JSON object in this format (no markdown formatting, no
   } catch (error: any) {
     console.warn('Gemini API quota rate-limit fallback — generating curated persona post...');
     
-    // High quality template generator from candidate topic
+    // High quality rich description template generator with hashtags
     const emojiList = ['🚀', '⚡', '🤖', '🔥', '💡'];
     const emoji = emojiList[Math.floor(Math.random() * emojiList.length)];
     
-    finalPostContent = `${emoji} ${selectedTopic.title}\n\nKey Takeaway: ${selectedTopic.summary.slice(0, 110)}...\n\nRead full story: ${selectedTopic.url} #TechTrends`;
-    if (finalPostContent.length > 250) {
-      finalPostContent = `${emoji} ${selectedTopic.title.slice(0, 140)}\n\n${selectedTopic.url} #TechTrends`;
-    }
+    finalPostContent = `${emoji} ${selectedTopic.title}\n\n📌 Detailed Overview:\n${selectedTopic.summary}\n\n💡 Why It Matters:\nThis breakthrough represents a major shift in tech infrastructure and next-gen AI systems.\n\n🔗 Full Story: ${selectedTopic.url}\n\n#ArtificialIntelligence #TechNews #FutureTech #Innovation #AURA_AI`;
     qualityCritique = 'Auto-curated via AURA AI discovery engine.';
   }
 
