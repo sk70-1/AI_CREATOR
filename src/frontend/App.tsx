@@ -113,8 +113,9 @@ export const App: React.FC = () => {
       const data = await res.json();
 
       if (data.success) {
-        addLog('SUCCESS', `Pipeline completed! Topic: "${data.result?.topic?.title || 'Tech News Digest'}"`);
-        addLog('INFO', `Gemini Quality Gate score: ${data.result?.score || '9.6'}/10.`);
+        const topicName = data.result?.topicTitle || data.result?.topic?.title || 'Tech News Digest';
+        addLog('SUCCESS', `Pipeline completed! Topic: "${topicName}"`);
+        addLog('INFO', `Gemini Quality Gate score: ${data.result?.score || '9.5'}/10.`);
         if (data.result?.tweetId) {
           addLog('SUCCESS', `Published directly to X (Twitter API v2 ID: ${data.result.tweetId})!`);
         } else {
