@@ -22,23 +22,59 @@ export function getRedditShareIntentUrl(topicUrl?: string, topicTitle?: string):
   return `https://www.reddit.com/submit?url=${encodeURIComponent(targetUrl)}&title=${encodeURIComponent(title)}`;
 }
 
+export async function getLinkedInUserInfo(accessToken: string) {
+  const response = await axios.get('https://api.linkedin.com/v2/userinfo', {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const sub = response.data.sub;
+  return {
+    sub,
+    name: response.data.name || response.data.given_name,
+    email: response.data.email,
+    authorUrn: `urn:li:person:${sub}`,
+  };
+}
+
 export async function publishToLinkedIn(
   content: string,
   topicUrl?: string,
   topicTitle?: string
 ): Promise<LinkedInPublishResult> {
   const accessToken = process.env.LINKEDIN_ACCESS_TOKEN;
-  const authorUrn = process.env.LINKEDIN_AUTHOR_URN; // e.g. urn:li:person:123456 or urn:li:organization:123456
+  let authorUrn = process.env.LINKEDIN_AUTHOR_URN; // e.g. urn:li:person:123456
   const shareIntentUrl = getLinkedInShareIntentUrl(topicUrl);
 
-  if (!accessToken || !authorUrn) {
-    console.warn('⚠️ LINKEDIN_ACCESS_TOKEN or LINKEDIN_AUTHOR_URN missing. Generating 1-click LinkedIn Intent URL fallback.');
+  if (!accessToken) {
+    console.warn('⚠️ LINKEDIN_ACCESS_TOKEN missing. Generating 1-click LinkedIn Intent URL fallback.');
     return {
       postId: `linkedin_intent_${Date.now()}`,
       postUrl: shareIntentUrl,
       shareIntentUrl,
       isSimulated: true,
-      message: 'LinkedIn API credentials missing. 1-click Share Intent URL generated.',
+      message: 'LINKEDIN_ACCESS_TOKEN is missing. 1-click Share Intent URL generated.',
+    };
+  }
+
+  // Auto-fetch authorUrn if token exists but URN is not set
+  if (!authorUrn) {
+    try {
+      const info = await getLinkedInUserInfo(accessToken);
+      authorUrn = info.authorUrn;
+      console.log(`ℹ️ Auto-retrieved LinkedIn Author URN: ${authorUrn}`);
+    } catch (err: any) {
+      console.warn('⚠️ Failed to auto-fetch LinkedIn Author URN:', err?.message || err);
+    }
+  }
+
+  if (!authorUrn) {
+    return {
+      postId: `linkedin_intent_${Date.now()}`,
+      postUrl: shareIntentUrl,
+      shareIntentUrl,
+      isSimulated: true,
+      message: 'Could not resolve LINKEDIN_AUTHOR_URN. 1-click Share Intent URL generated.',
     };
   }
 

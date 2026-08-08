@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { db, initDatabase } from '../db/database';
 import { runAgentPipeline } from '../agent/pipeline';
-import { publishToLinkedIn, getLinkedInShareIntentUrl } from '../publishers/linkedin';
+import { publishToLinkedIn, getLinkedInShareIntentUrl, getLinkedInUserInfo } from '../publishers/linkedin';
 import crypto from 'crypto';
 
 const router = Router();
@@ -27,6 +27,20 @@ router.get('/agent/feed', async (req: Request, res: Response) => {
     res.json({ success: true, posts: postsResult.rows });
   } catch (error: any) {
     res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Fetch LinkedIn user profile info & URN using token
+router.get('/agent/linkedin/me', async (req: Request, res: Response) => {
+  try {
+    const token = (req.query.token as string) || process.env.LINKEDIN_ACCESS_TOKEN;
+    if (!token) {
+      return res.status(400).json({ success: false, error: 'LINKEDIN_ACCESS_TOKEN is missing.' });
+    }
+    const info = await getLinkedInUserInfo(token);
+    res.json({ success: true, info });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error?.response?.data || error?.message || 'LinkedIn token verification failed' });
   }
 });
 
@@ -182,10 +196,7 @@ router.get('/agent/status', async (req: Request, res: Response) => {
       process.env.TWITTER_ACCESS_SECRET
     );
 
-    const hasLinkedInKeys = Boolean(
-      process.env.LINKEDIN_ACCESS_TOKEN &&
-      process.env.LINKEDIN_AUTHOR_URN
-    );
+    const hasLinkedInKeys = Boolean(process.env.LINKEDIN_ACCESS_TOKEN);
 
     const hasGeminiKey = Boolean(process.env.GEMINI_API_KEY);
 
