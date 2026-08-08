@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import apiRouter from './routes/api';
 import { initDatabase } from './db/database';
 
@@ -25,12 +26,22 @@ app.use(async (req, res, next) => {
 // Register API routes
 app.use('/api', apiRouter);
 
-// Serve static frontend dashboard
-app.use(express.static(path.join(process.cwd(), 'public')));
+// Serve static frontend dashboard (dist or public fallback)
+const staticDir = fs.existsSync(path.join(process.cwd(), 'dist', 'index.html'))
+  ? path.join(process.cwd(), 'dist')
+  : path.join(process.cwd(), 'public');
 
-// Fallback: serve index.html for root
-app.get('/', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
+app.use(express.static(staticDir));
+
+// Fallback: serve index.html for SPA routing
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) return next();
+  const indexPath = path.join(staticDir, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    next();
+  }
 });
 
 // Global error handler — prevents unhandled errors from crashing the Lambda
