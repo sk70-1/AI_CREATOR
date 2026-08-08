@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sidebar } from './components/Sidebar';
+import { Sidebar, ActiveTab } from './components/Sidebar';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { Stats } from './components/Stats';
@@ -10,7 +10,8 @@ import { ExecutionLogs, LogMessage } from './components/ExecutionLogs';
 import { SystemSettings } from './components/SystemSettings';
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('feed');
+  const [activeTab, setActiveTab] = useState<ActiveTab>('command');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [posts, setPosts] = useState<PostItem[]>([]);
   const [personas, setPersonas] = useState<PersonaItem[]>([]);
   const [status, setStatus] = useState<any>(null);
@@ -220,11 +221,25 @@ export const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-background text-on-background flex font-body antialiased selection:bg-primary-container selection:text-on-primary-container">
       {/* Sidebar Navigation */}
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Sidebar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        mobileMenuOpen={mobileMenuOpen}
+        setMobileMenuOpen={setMobileMenuOpen}
+        onOpenTriggerModal={handleTriggerPipeline}
+        activePersonaName={activePersona.name}
+      />
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
-        <Header activePersona={activePersona} onTriggerPipeline={handleTriggerPipeline} isTriggering={isTriggering} />
+        <Header
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          mobileMenuOpen={mobileMenuOpen}
+          setMobileMenuOpen={setMobileMenuOpen}
+          onTriggerPipeline={handleTriggerPipeline}
+          isTriggering={isTriggering}
+        />
 
         <main className="flex-1 p-4 md:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-6 overflow-y-auto">
           {/* Hero Section */}
@@ -234,7 +249,7 @@ export const App: React.FC = () => {
           <Stats status={status} postsCount={posts.length} />
 
           {/* Main Tab Views */}
-          {activeTab === 'feed' && (
+          {(activeTab === 'command' || activeTab === ('' as any)) && (
             <ProjectsFeed posts={posts} isLoading={isLoadingFeed} onTriggerPipeline={handleTriggerPipeline} />
           )}
 
