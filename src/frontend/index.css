@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #0c1323;
+  --color-surface: #0c1323;
+  --color-surface-container-lowest: #070e1d;
+  --color-surface-container-low: #141b2b;
+  --color-surface-container: #181f2f;
+  --color-surface-container-high: #232a3a;
+  --color-surface-container-highest: #2e3545;
+  --color-surface-variant: #2e3545;
+  --color-surface-bright: #32394a;
+  --color-surface-dim: #0c1323;
+  --color-surface-deep: #07070a;
+  --color-on-surface: #dbe2f8;
+  --color-on-surface-variant: #c8c4d8;
+  --color-text-muted: #666d80;
+  --color-inverse-surface: #dbe2f8;
+  --color-inverse-on-surface: #293041;
+  --color-primary: #c5c0ff;
+  --color-on-primary: #2500a2;
+  --color-primary-container: #6453f9;
+  --color-on-primary-container: #f5f1ff;
+  --color-primary-fixed: #e3dfff;
+  --color-primary-fixed-dim: #c5c0ff;
+  --color-inverse-primary: #533fe8;
+  --color-secondary: #c8c5cd;
+  --color-secondary-container: #49484e;
+  --color-on-secondary-container: #bab7be;
+  --color-secondary-fixed: #e4e1e9;
+  --color-tertiary: #ffb68e;
+  --color-tertiary-container: #b55100;
+  --color-on-tertiary-container: #ffefe9;
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-error: #690005;
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+
+  --font-headline: "Hanken Grotesk", "Plus Jakarta Sans", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --spacing-container-max: 1280px;
+}
+
+body {
+  background-color: #0c1323;
+  color: #dbe2f8;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.filled-icon {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Custom Grid Pattern for Canvas Background */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+/* Node Connection Animated Lines */
+.flow-line {
+  stroke-dasharray: 10;
+  animation: flow 2s linear infinite;
+}
+
+@keyframes flow {
+  from { stroke-dashoffset: 20; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}

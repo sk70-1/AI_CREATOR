@@ -3,6 +3,7 @@
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
+    "jsx": "react-jsx",
     "outDir": "./dist",
     "rootDir": "./",
     "strict": true,
@@ -11,5 +12,13 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*", "api/**/*"]
+  "include": [
+    "src/agent/**/*",
+    "src/db/**/*",
+    "src/publishers/**/*",
+    "src/routes/**/*",
+    "src/app.ts",
+    "src/index.ts",
+    "api/**/*"
+  ]
 }
