@@ -1,12 +1,12 @@
 import React from 'react';
-import { Bot, Bell, HelpCircle, Menu, X, Play } from 'lucide-react';
+import { Bot, Bell, Menu, X, Play } from 'lucide-react';
 import { ActiveTab } from './Sidebar';
 
 interface HeaderProps {
   activeTab: ActiveTab;
   setActiveTab: (tab: ActiveTab) => void;
-  mobileMenuOpen: boolean;
-  setMobileMenuOpen: (open: boolean) => void;
+  mobileMenuOpen?: boolean;
+  setMobileMenuOpen?: (open: boolean) => void;
   onTriggerPipeline: () => void;
   isTriggering: boolean;
 }
@@ -14,21 +14,29 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   activeTab,
   setActiveTab,
-  mobileMenuOpen,
+  mobileMenuOpen = false,
   setMobileMenuOpen,
   onTriggerPipeline,
   isTriggering,
 }) => {
   return (
-    <header className="md:hidden flex justify-between items-center px-4 w-full h-16 bg-surface/90 backdrop-blur-xl border-b border-border-subtle sticky top-0 z-50">
+    <header className="lg:hidden flex justify-between items-center px-4 w-full h-16 bg-surface/90 backdrop-blur-xl border-b border-border-subtle sticky top-0 z-50 select-none">
       <div className="flex items-center gap-3">
         <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          onClick={() => {
+            if (typeof setMobileMenuOpen === 'function') {
+              setMobileMenuOpen(!mobileMenuOpen);
+            }
+          }}
           className="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-variant focus:outline-none"
+          aria-label="Toggle Navigation Menu"
         >
           {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
-        <div className="flex items-center gap-2" onClick={() => setActiveTab('command')}>
+        <div
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => setActiveTab('command')}
+        >
           <div className="w-7 h-7 rounded bg-primary-container flex items-center justify-center">
             <Bot className="w-4 h-4 text-on-primary-container" />
           </div>
