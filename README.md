@@ -1,16 +1,16 @@
-# Creators :- <details>
+# Creators :-<details>
   <summary><b>Souvik Konar</b></summary>
   <ul>
     <li><a href="https://linkedin.com/in/YOUR-LINKEDIN-USERNAME" target="_blank">LinkedIn Profile</a></li>
     <li><a href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank">GitHub Profile</a></li>
   </ul>
-</details>, <details>
+</details>,<details>
   <summary><b>Soumalya Das</b></summary>
   <ul>
     <li><a href="https://linkedin.com/in/YOUR-LINKEDIN-USERNAME" target="_blank">LinkedIn Profile</a></li>
     <li><a href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank">GitHub Profile</a></li>
   </ul>
-</details>, <details>
+</details>,<details>
   <summary><b>Satyabrata Das</b></summary>
   <ul>
     <li><a href="https://linkedin.com/in/YOUR-LINKEDIN-USERNAME" target="_blank">LinkedIn Profile</a></li>
