@@ -1,22 +1,28 @@
-# Creators :-<details>
-  <summary><b>Souvik Konar</b></summary>
-  <ul>
-    <li><a href="https://linkedin.com/in/YOUR-LINKEDIN-USERNAME" target="_blank">LinkedIn Profile</a></li>
-    <li><a href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank">GitHub Profile</a></li>
-  </ul>
-</details>,<details>
-  <summary><b>Soumalya Das</b></summary>
-  <ul>
-    <li><a href="https://linkedin.com/in/YOUR-LINKEDIN-USERNAME" target="_blank">LinkedIn Profile</a></li>
-    <li><a href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank">GitHub Profile</a></li>
-  </ul>
-</details>,<details>
-  <summary><b>Satyabrata Das</b></summary>
-  <ul>
-    <li><a href="https://linkedin.com/in/YOUR-LINKEDIN-USERNAME" target="_blank">LinkedIn Profile</a></li>
-    <li><a href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank">GitHub Profile</a></li>
-  </ul>
-</details>
+# Creators :-<table>
+  <tr>
+    <td align="center">
+      <details>
+        <summary><b>Souvik Konar</b></summary>
+        <a href="https://linkedin.com/in/username1" target="_blank">LinkedIn</a><br>
+        <a href="https://github.com/username1" target="_blank">GitHub</a>
+      </details>
+    </td>
+    <td align="center">
+      <details>
+        <summary><b>Satyabrata Das</b></summary>
+        <a href="https://linkedin.com/in/username2" target="_blank">LinkedIn</a><br>
+        <a href="https://github.com/username2" target="_blank">GitHub</a>
+      </details>
+    </td>
+    <td align="center">
+      <details>
+        <summary><b>Soumalya Das</b></summary>
+        <a href="https://linkedin.com/in/username3" target="_blank">LinkedIn</a><br>
+        <a href="https://github.com/username3" target="_blank">GitHub</a>
+      </details>
+    </td>
+  </tr>
+</table>
 # 🚀 Autonomous AI Creator — AURA AI Command Center
 
 > **Autonomous Tech News Curator & Multi-Platform Publisher** powered by **React**, **TypeScript**, **Tailwind CSS**, **Google Gemini 2.0 Flash**, **LinkedIn API**, **Turso Cloud DB**, and **Vercel Serverless Functions**.
