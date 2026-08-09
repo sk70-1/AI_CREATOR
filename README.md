@@ -1,3 +1,4 @@
+# Creators :- Souvik Konar, Soumalya Das, Satyabrata Das
 # 🚀 Autonomous AI Creator — AURA AI Command Center
 
 > **Autonomous Tech News Curator & Multi-Platform Publisher** powered by **React**, **TypeScript**, **Tailwind CSS**, **Google Gemini 2.0 Flash**, **LinkedIn API**, **Turso Cloud DB**, and **Vercel Serverless Functions**.
