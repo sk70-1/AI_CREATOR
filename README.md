@@ -5,7 +5,7 @@
     <td align="center">
       <details>
         <summary><b>Souvik Konar</b></summary>
-        <a href="www.linkedin.com/in/souvik-konar-here" target="_blank">LinkedIn</a><br>
+        <a href="https://www.linkedin.com/in/souvik-konar-here/" target="_blank">LinkedIn</a><br>
         <a href="https://github.com/sk70-1" target="_blank">GitHub</a>
       </details>
     </td>
