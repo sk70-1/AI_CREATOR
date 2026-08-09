@@ -1,28 +1,32 @@
-# Creators :-<table>
+# Creators :-
+
+<table>
   <tr>
     <td align="center">
       <details>
         <summary><b>Souvik Konar</b></summary>
-        <a href="https://linkedin.com/in/username1" target="_blank">LinkedIn</a><br>
-        <a href="https://github.com/username1" target="_blank">GitHub</a>
+        <a href="www.linkedin.com/in/souvik-konar-here" target="_blank">LinkedIn</a><br>
+        <a href="https://github.com/sk70-1" target="_blank">GitHub</a>
       </details>
     </td>
     <td align="center">
       <details>
         <summary><b>Satyabrata Das</b></summary>
-        <a href="https://linkedin.com/in/username2" target="_blank">LinkedIn</a><br>
+        <a href="https://www.linkedin.com/in/satyabrata-das-65b751326?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank">LinkedIn</a><br>
         <a href="https://github.com/username2" target="_blank">GitHub</a>
       </details>
     </td>
     <td align="center">
       <details>
         <summary><b>Soumalya Das</b></summary>
-        <a href="https://linkedin.com/in/username3" target="_blank">LinkedIn</a><br>
+        <a href="https://www.linkedin.com/in/soumalya-das-30b3a1370?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank">LinkedIn</a><br>
         <a href="https://github.com/username3" target="_blank">GitHub</a>
       </details>
     </td>
   </tr>
 </table>
+
+
 # 🚀 Autonomous AI Creator — AURA AI Command Center
 
 > **Autonomous Tech News Curator & Multi-Platform Publisher** powered by **React**, **TypeScript**, **Tailwind CSS**, **Google Gemini 2.0 Flash**, **LinkedIn API**, **Turso Cloud DB**, and **Vercel Serverless Functions**.
