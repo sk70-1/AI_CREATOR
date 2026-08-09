@@ -13,14 +13,14 @@
       <details>
         <summary><b>Satyabrata Das</b></summary>
         <a href="https://www.linkedin.com/in/satyabrata-das-65b751326?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank">LinkedIn</a><br>
-        <a href="https://github.com/username2" target="_blank">GitHub</a>
+        <a href="https://github.com/Satyabrata2005D" target="_blank">GitHub</a>
       </details>
     </td>
     <td align="center">
       <details>
         <summary><b>Soumalya Das</b></summary>
         <a href="https://www.linkedin.com/in/soumalya-das-30b3a1370?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank">LinkedIn</a><br>
-        <a href="https://github.com/username3" target="_blank">GitHub</a>
+        <a href="https://github.com/Soumalya005" target="_blank">GitHub</a>
       </details>
     </td>
   </tr>
