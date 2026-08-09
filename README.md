@@ -1,4 +1,22 @@
-# Creators :- Souvik Konar, Soumalya Das, Satyabrata Das
+# Creators :- <details>
+  <summary><b>Souvik Konar</b></summary>
+  <ul>
+    <li><a href="https://linkedin.com/in/YOUR-LINKEDIN-USERNAME" target="_blank">LinkedIn Profile</a></li>
+    <li><a href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank">GitHub Profile</a></li>
+  </ul>
+</details>, <details>
+  <summary><b>Soumalya Das</b></summary>
+  <ul>
+    <li><a href="https://linkedin.com/in/YOUR-LINKEDIN-USERNAME" target="_blank">LinkedIn Profile</a></li>
+    <li><a href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank">GitHub Profile</a></li>
+  </ul>
+</details>, <details>
+  <summary><b>Satyabrata Das</b></summary>
+  <ul>
+    <li><a href="https://linkedin.com/in/YOUR-LINKEDIN-USERNAME" target="_blank">LinkedIn Profile</a></li>
+    <li><a href="https://github.com/YOUR-GITHUB-USERNAME" target="_blank">GitHub Profile</a></li>
+  </ul>
+</details>
 # 🚀 Autonomous AI Creator — AURA AI Command Center
 
 > **Autonomous Tech News Curator & Multi-Platform Publisher** powered by **React**, **TypeScript**, **Tailwind CSS**, **Google Gemini 2.0 Flash**, **LinkedIn API**, **Turso Cloud DB**, and **Vercel Serverless Functions**.
